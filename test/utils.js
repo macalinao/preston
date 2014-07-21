@@ -13,18 +13,29 @@ describe('utils', function() {
         ['kill']
       ]);
     });
+    
     it('should tolerate double quotes', function() {
       var res = utils.parseFilterString('find "a license to kill" | destroy b | kill');
       expect(res).to.eql([
-        ['find', '"a license to kill"'],
+        ['find', 'a license to kill'],
         ['destroy', 'b'],
         ['kill']
       ]);
     });
+    
     it('should tolerate single quotes', function() {
       var res = utils.parseFilterString("find 'a license to kill' | destroy b | kill");
       expect(res).to.eql([
-        ['find', "'a license to kill'"],
+        ['find', 'a license to kill'],
+        ['destroy', 'b'],
+        ['kill']
+      ]);
+    });
+
+    it('should not remove heterogenous quotes', function() {
+      var res = utils.parseFilterString("find 'a license to kill\" | destroy b | kill");
+      expect(res).to.eql([
+        ['find', '\'a license to kill"'],
         ['destroy', 'b'],
         ['kill']
       ]);
