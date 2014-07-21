@@ -46,13 +46,24 @@ describe('Model', function() {
         });
       });
 
-      it('should prevent access of restricted fields', function(done) {
+      it('should not return restricted fields', function(done) {
+        request(app).get('/users').query({
+          name: 'Bob'
+        }).end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.body[0].password).to.be.undefined;
+          done();
+        });
+      });
+
+      it('should prevent searching for restricted fields', function(done) {
         request(app).get('/users')
           .query({
             password: 'hunter2'
           }).end(function(err, res) {
             expect(err).to.be.null;
             expect(res.status).to.equal(401);
+            expect(res.body.message).to.match(/Cannot access restricted field/);
             done();
           });
       });
