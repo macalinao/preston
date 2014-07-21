@@ -233,18 +233,6 @@ describe('Model', function() {
           });
       });
 
-      it('should ignore NaN limits', function(done) {
-        request(app).get('/users')
-          .query({
-            limit: 'NaN'
-          }).end(function(err, res) {
-            expect(err).to.be.null;
-            expect(res.status).to.equal(200);
-            expect(res.body.length).to.equal(5);
-            done();
-          });
-      });
-
       it('model limit should override NaN limits', function(done) {
         User.limit(4);
         request(app).get('/users')
@@ -254,6 +242,18 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
             expect(res.body.length).to.equal(4);
+            done();
+          });
+      });
+
+      it('should error if limit is not a number', function(done) {
+        request(app).get('/users')
+          .query({
+            limit: 'NaN'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Limit must be a number/);
             done();
           });
       });
