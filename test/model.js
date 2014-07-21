@@ -285,6 +285,32 @@ describe('Model', function() {
       });
     });
 
+    describe('populate', function() {
+      it('should error if the field does not exist', function(done) {
+        request(app).get('/users')
+          .query({
+            populate: 'dne'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/does not exist/);
+            done();
+          });
+      });
+
+      it('should populate a field', function(done) {
+        request(app).get('/users')
+          .query({
+            populate: 'dne'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/does not exist/);
+            done();
+          });
+      });
+    });
+
     describe('modifiers', function() {
       it('should change the parameter', function(done) {
         User.modifyParam('name', function(req, value) {

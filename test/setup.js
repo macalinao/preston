@@ -15,7 +15,14 @@ module.exports = function setup(done) {
       type: String,
       restricted: true
     },
-    hobby: String
+    hobby: String,
+    comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Story'
+    }]
+  }));
+  var Comment = conn.model('Comment', new mongoose.Schema({
+    content: String
   }));
 
   var app = express();
@@ -23,16 +30,29 @@ module.exports = function setup(done) {
   restifier.setup(app);
 
   var UserModel = restifier.model(User).serve(app);
+  var CommentModel = restifier.model(Comment).serve(app);
   var server = http.createServer(app);
   server.listen(9999);
 
+  var users = {};
+
   async.each(['Bob', 'Tim', 'Frank', 'Freddie', 'Asdf'], function(item, next) {
-    var user = new User({
+    var user = users[item] = new User({
       name: item,
       password: item + 1,
       hobby: (item === 'Tim') ? null : item + 'sledding'
     });
-    user.save(next);
+
+    // Add comments for each user
+    async.each(['Lol this is funny', 'test', 'asdf'], function(item, next2) {
+      var comment = new Comment({
+        content: item
+      });
+      user.comments.push(comment);
+      comment.save(next2);
+    }, function() {
+      user.save(next);
+    });
   }, done);
 
   return {
