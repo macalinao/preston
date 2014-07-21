@@ -1,0 +1,23 @@
+{
+  "name": "mongoose-restifier",
+  "version": "1.0.0",
+  "description": "Serves Mongoose models on a flexible, RESTful API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simplyianm/mongoose-restifier"
+  },
+  "keywords": ["mongoose","rest","express","api","angularjs"],
+  "author": "Ian Macalinao <me@ian.pw>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/simplyianm/mongoose-restifier/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.8.1",    "mocha": "~1.17.0"
+  }
+}
