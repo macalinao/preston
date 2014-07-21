@@ -26,6 +26,9 @@ app.use(restifier.model(mongoose.model('User'))
     .constrain('password', function(req, pass) {
       return pass ? null : pass; // If a password parameter was in the query, remove it.
       })
+    .filter('myposts', function(query, req) { // A filter to get the requester's posts
+      query.where('author').equals(req.user._id);
+    })
     .middleware()); // Create the middleware
 ```
 
