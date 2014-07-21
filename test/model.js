@@ -271,6 +271,18 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('should error if skip is not a number', function(done) {
+        request(app).get('/users')
+          .query({
+            skip: 'NaN'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Skip must be a number/);
+            done();
+          });
+      });
     });
 
     describe('modifiers', function() {
