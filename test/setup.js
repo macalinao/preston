@@ -23,12 +23,13 @@ module.exports = function setup(done) {
   var server = http.createServer(app);
   server.listen(9999);
 
-  (new User({
-    name: 'Test',
-    password: 'asdf123'
-  })).save(function(err, res) {
-    done();
-  });
+  async.each(['Bob', 'Tim', 'Frank', 'Freddie', 'Asdf'], function(item, next) {
+    var user = new User({
+      name: item,
+      password: item + 1,
+    });
+    user.save(next);
+  }, done);
 
   return {
     app: app,

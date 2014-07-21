@@ -26,10 +26,13 @@ describe('Model', function() {
   });
 
   describe('#serve', function() {
-    it('should return all documents with query', function(done) {
-      request(app).get('/users').end(function(err, res) {
-        expect(err).to.be.null;
-        done();
+    describe('query', function() {
+      it('should return all documents with query', function(done) {
+        request(app).get('/users').end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.body.length).to.equal(5);
+          done();
+        });
       });
     });
   });
