@@ -139,6 +139,19 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('model limit should not be applied if given limit is lower', function(done) {
+        UserModel.limit(4);
+        request(app).get('/users')
+          .query({
+            limit: 2
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(2);
+            done();
+          });
+      });
     });
 
     describe('modifiers', function() {
