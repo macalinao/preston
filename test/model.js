@@ -79,6 +79,43 @@ describe('Model', function() {
         });
     });
 
+    describe('limit', function() {
+      it('should limit returned doc count if limit is lower than collection size', function(done) {
+        request(app).get('/users')
+          .query({
+            limit: 4
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(4);
+            done();
+          });
+      });
+      
+      it('should return all docs if limit is higher than collection size', function(done) {
+        request(app).get('/users')
+          .query({
+            limit: 6
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
+      it('should return all docs if limit is equal to collection size', function(done) {
+        request(app).get('/users')
+          .query({
+            limit: 5
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
+    });
+
     describe('modifiers', function() {
       it('should change the parameter', function(done) {
         UserModel.modifyParam('name', function(req, value) {
