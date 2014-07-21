@@ -67,6 +67,18 @@ describe('Model', function() {
         });
     });
 
+    it('should allow searching for null fields', function(done) {
+      request(app).get('/users')
+        .query({
+          hobby: null
+        }).end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(1);
+          done();
+        });
+    });
+
     describe('modifiers', function() {
       it('should change the parameter', function(done) {
         UserModel.modifyParam('name', function(req, value) {

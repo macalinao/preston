@@ -14,7 +14,8 @@ module.exports = function setup(done) {
     password: {
       type: String,
       restricted: true
-    }
+    },
+    hobby: String
   }));
 
   var app = express();
@@ -29,6 +30,7 @@ module.exports = function setup(done) {
     var user = new User({
       name: item,
       password: item + 1,
+      hobby: (item === 'Tim') ? null : item + 'sledding'
     });
     user.save(next);
   }, done);
