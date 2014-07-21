@@ -97,6 +97,21 @@ describe('Model', function() {
             done();
           });
       });
+      
+      it('should not delete the parameter if null', function(done) {
+        UserModel.modifyParam('name', function(req, value) {
+          return null;
+        });
+        request(app).get('/users')
+          .query({
+            name: 'Bob'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(0);
+            done();
+          });
+      });
     });
   });
 
