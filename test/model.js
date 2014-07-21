@@ -152,6 +152,31 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('should ignore NaN limits', function(done) {
+        request(app).get('/users')
+          .query({
+            limit: 'NaN'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
+
+      it('model limit should override NaN limits', function(done) {
+        UserModel.limit(4);
+        request(app).get('/users')
+          .query({
+            limit: 'NaN'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(4);
+            done();
+          });
+      });
     });
 
     describe('modifiers', function() {
