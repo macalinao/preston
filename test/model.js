@@ -36,7 +36,9 @@ describe('Model', function() {
       });
 
       it('should return a specific document when a param is given', function(done) {
-        request(app).get('/users').query({ name: 'Bob' }).end(function(err, res) {
+        request(app).get('/users').query({
+          name: 'Bob'
+        }).end(function(err, res) {
           expect(err).to.be.null;
           expect(res.body.length).to.equal(1);
           expect(res.body[0].name).to.equal('Bob');
@@ -45,11 +47,14 @@ describe('Model', function() {
       });
 
       it('should prevent access of restricted fields', function(done) {
-        request(app).get('/users').query({ password: 'hunter2' }).end(function(err, res) {
-          expect(err).to.be.null;
-          expect(res.status).to.equal(401);
-          done();
-        });
+        request(app).get('/users')
+          .query({
+            password: 'hunter2'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(401);
+            done();
+          });
       });
     });
   });
