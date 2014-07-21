@@ -137,6 +137,26 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('should support chaining', function(done) {
+        User.filter('threeletters', function(req, query, field) {
+          query.where(field).regex(/^[a-zA-Z]{3}$/);
+        });
+        User.filter('winners', function(req, query, field) {
+          query.where(field).ne(null);
+        });
+        request(app).get('/users')
+          .query({
+            filter: 'threeletters name | winners hobby'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0].name).to.equal('Bob');
+            done();
+          });
+      });
+
     });
 
     describe('limit', function() {
