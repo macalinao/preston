@@ -78,4 +78,13 @@ Filters are applied to the query before the parameters listed above are.
 There are several filters built into `mongoose-restifier`, which will be listed below.
 
 #### Comparison Filters
+These are modeled off of the [MongoDB Comparison Query Operators](http://docs.mongodb.org/manual/reference/operator/query-comparison/).
+
+* `gt <field> <value>` - Matches where the field is greater than the given value.
+* `gte <field> <value>` - Matches where the field is greater than the given value.
+* `in <field> <value>` - Matches where the field is greater than the given value.
+* `lt <field> <value>` - Matches where the field is greater than the given value.
+* `lte <field> <value>` - Matches where the field is greater than the given value.
+* `ne <field> <value>` - Matches where the field is greater than the given value.
+* `nin <field> <value>` - Matches where the field is greater than the given value.
 
