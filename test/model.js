@@ -91,7 +91,7 @@ describe('Model', function() {
             done();
           });
       });
-      
+
       it('should return all docs if limit is higher than collection size', function(done) {
         request(app).get('/users')
           .query({
@@ -103,6 +103,7 @@ describe('Model', function() {
             done();
           });
       });
+
       it('should return all docs if limit is equal to collection size', function(done) {
         request(app).get('/users')
           .query({
@@ -111,6 +112,30 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
             expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
+
+      it('should limit docs if specified in the model', function(done) {
+        UserModel.limit(4);
+        request(app).get('/users')
+          .query().end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(4);
+            done();
+          });
+      });
+
+      it('model limit should override query limit', function(done) {
+        UserModel.limit(4);
+        request(app).get('/users')
+          .query({
+            limit: 6
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(4);
             done();
           });
       });
@@ -146,7 +171,7 @@ describe('Model', function() {
             done();
           });
       });
-      
+
       it('should not delete the parameter if null', function(done) {
         UserModel.modifyParam('name', function(req, value) {
           return null;
