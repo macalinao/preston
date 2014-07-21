@@ -93,7 +93,7 @@ describe('Model', function() {
 
       it('should error if a filter throws an error', function(done) {
         User.filter('custom', function(req, query) {
-          throw 'This is an error';
+          throw new Error('This is an error');
         });
         request(app).get('/users')
           .query({
