@@ -259,6 +259,20 @@ describe('Model', function() {
       });
     });
 
+    describe('skip', function() {
+      it('should skip over the number of documents given', function(done) {
+        request(app).get('/users')
+          .query({
+            skip: 2
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(3);
+            done();
+          });
+      });
+    });
+
     describe('modifiers', function() {
       it('should change the parameter', function(done) {
         User.modifyParam('name', function(req, value) {
