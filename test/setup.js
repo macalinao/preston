@@ -39,7 +39,6 @@ module.exports = function setup(done) {
     app: app,
     conn: conn,
     server: server,
-    User: User,
-    UserModel: UserModel
+    User: UserModel
   };
 };

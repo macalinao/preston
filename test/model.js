@@ -10,7 +10,7 @@ var restifier = require('../lib/');
 var setup = require('./setup');
 
 describe('Model', function() {
-  var app, conn, server, User, UserModel;
+  var app, conn, server, User;
 
   beforeEach(function(done) {
     var ret = setup(done);
@@ -18,11 +18,10 @@ describe('Model', function() {
     conn = ret.conn;
     server = ret.server;
     User = ret.User;
-    UserModel = ret.UserModel;
   });
 
   it('should detect restricted fields in a schema', function() {
-    expect(UserModel.restricted).to.eql(['password']);
+    expect(User.restricted).to.eql(['password']);
   });
 
   describe('query', function() {
@@ -117,7 +116,7 @@ describe('Model', function() {
       });
 
       it('should limit docs if specified in the model', function(done) {
-        UserModel.limit(4);
+        User.limit(4);
         request(app).get('/users')
           .query().end(function(err, res) {
             expect(err).to.be.null;
@@ -128,7 +127,7 @@ describe('Model', function() {
       });
 
       it('model limit should override query limit', function(done) {
-        UserModel.limit(4);
+        User.limit(4);
         request(app).get('/users')
           .query({
             limit: 6
@@ -141,7 +140,7 @@ describe('Model', function() {
       });
 
       it('model limit should not be applied if given limit is lower', function(done) {
-        UserModel.limit(4);
+        User.limit(4);
         request(app).get('/users')
           .query({
             limit: 2
@@ -166,7 +165,7 @@ describe('Model', function() {
       });
 
       it('model limit should override NaN limits', function(done) {
-        UserModel.limit(4);
+        User.limit(4);
         request(app).get('/users')
           .query({
             limit: 'NaN'
@@ -181,7 +180,7 @@ describe('Model', function() {
 
     describe('modifiers', function() {
       it('should change the parameter', function(done) {
-        UserModel.modifyParam('name', function(req, value) {
+        User.modifyParam('name', function(req, value) {
           return 'Tim';
         });
         request(app).get('/users')
@@ -196,7 +195,7 @@ describe('Model', function() {
       });
 
       it('should delete a parameter if it returns false', function(done) {
-        UserModel.modifyParam('name', function(req, value) {
+        User.modifyParam('name', function(req, value) {
           return false;
         });
         request(app).get('/users')
@@ -211,7 +210,7 @@ describe('Model', function() {
       });
 
       it('should not delete the parameter if null', function(done) {
-        UserModel.modifyParam('name', function(req, value) {
+        User.modifyParam('name', function(req, value) {
           return null;
         });
         request(app).get('/users')
