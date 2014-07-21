@@ -24,8 +24,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "async": "^0.9.0",
     "chai": "~1.8.1",
+    "express": "^4.6.1",
     "mocha": "~1.17.0",
-    "mongoose": "^3.8.13"
+    "mongoose": "^3.8.13",
+    "supertest": "^0.13.0"
   }
 }

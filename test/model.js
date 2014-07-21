@@ -1,22 +1,43 @@
 "use strict";
 
 var expect = require('chai').expect;
+var express = require('express');
+var http = require('http');
 var mongoose = require('mongoose');
+var request = require('supertest');
 
 var restifier = require('../lib/');
+var setup = require('./setup');
 
 describe('Model', function() {
-  it('should detect restricted fields in a schema', function() {
-    var User = mongoose.model('User', new mongoose.Schema({
-      name: String,
-      password: {
-        type: String,
-        restricted: true
-      }
-    }));
+  var app, conn, server, User, UserModel;
 
-    var UserModel = restifier.model(User);
-    
+  beforeEach(function(done) {
+    var ret = setup(done);
+    app = ret.app;
+    conn = ret.conn;
+    server = ret.server;
+    User = ret.User;
+    UserModel = ret.UserModel;
+  });
+
+  it('should detect restricted fields in a schema', function() {
     expect(UserModel.restricted).to.eql(['password']);
+  });
+
+  describe('#serve', function() {
+    it('should return all documents with query', function(done) {
+      request(app).get('/users').end(function(err, res) {
+        expect(err).to.be.null;
+        done();
+      });
+    });
+  });
+
+  afterEach(function(done) {
+    server.close();
+    conn.db.dropDatabase(function(err) {
+      done(err);
+    });
   });
 });
