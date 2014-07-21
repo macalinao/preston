@@ -91,6 +91,21 @@ describe('Model', function() {
           });
       });
 
+      it('should error if a filter throws an error', function(done) {
+        User.filter('custom', function(req, query) {
+          throw 'This is an error';
+        });
+        request(app).get('/users')
+          .query({
+            filter: 'custom'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/This is an error/);
+            done();
+          });
+      });
+
       it('should properly add to the query', function(done) {
         User.filter('losers', function(req, query) {
           query.where('hobby').equals(null);
@@ -98,6 +113,22 @@ describe('Model', function() {
         request(app).get('/users')
           .query({
             filter: 'losers'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0].name).to.equal('Tim');
+            done();
+          });
+      });
+
+      it('should support multiple arguments', function(done) {
+        User.filter('losers', function(req, query, field) {
+          query.where(field).equals(null);
+        });
+        request(app).get('/users')
+          .query({
+            filter: 'losers hobby'
           }).end(function(err, res) {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
