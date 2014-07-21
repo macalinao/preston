@@ -18,7 +18,7 @@ module.exports = function setup(done) {
     hobby: String,
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Story'
+      ref: 'Comment'
     }]
   }));
   var Comment = conn.model('Comment', new mongoose.Schema({
