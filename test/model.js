@@ -78,6 +78,36 @@ describe('Model', function() {
         });
     });
 
+    describe('filters', function() {
+      it('should error if a filter does not exist', function(done) {
+        request(app).get('/users')
+          .query({
+            filter: 'dne'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/does not exist/);
+            done();
+          });
+      });
+
+      it('should properly add to the query', function(done) {
+        User.filter('losers', function(req, query) {
+          query.where('hobby').equals(null);
+        });
+        request(app).get('/users')
+          .query({
+            filter: 'losers'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(1);
+            expect(res.body[0].name).to.equal('Tim');
+            done();
+          });
+      });
+    });
+
     describe('limit', function() {
       it('should limit returned doc count if limit is lower than collection size', function(done) {
         request(app).get('/users')
