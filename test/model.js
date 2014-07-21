@@ -34,6 +34,14 @@ describe('Model', function() {
           done();
         });
       });
+
+      it('should return a specific document when a param is given', function(done) {
+        request(app).get('/users?name=Bob').end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0]).name.to.equal('Bob');
+        });
+      });
     });
   });
 
