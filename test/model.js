@@ -44,7 +44,7 @@ describe('Model', function() {
         });
       });
 
-      it('should prevent access of hidden fields', function(done) {
+      it('should prevent access of restricted fields', function(done) {
         request(app).get('/users').query({ password: 'hunter2' }).end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(401);
