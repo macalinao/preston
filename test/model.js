@@ -224,6 +224,26 @@ describe('Model', function() {
           });
       });
     });
+
+    describe('transformers', function() {
+      it('should be applied to all docs', function(done) {
+        User.transform(function(req, doc) {
+          delete doc._id;
+        });
+
+        request(app).get('/users')
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            res.body.filter(function(item) {
+              expect(item._id).to.be.undefined;
+              expect(item.name).to.not.be.null;
+            });
+            done();
+          });
+      });
+    });
   });
 
   afterEach(function(done) {
