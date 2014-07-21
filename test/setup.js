@@ -19,6 +19,8 @@ module.exports = function setup(done) {
 
   var app = express();
 
+  restifier.setup(app);
+
   var UserModel = restifier.model(User).serve(app);
   var server = http.createServer(app);
   server.listen(9999);
