@@ -557,6 +557,35 @@ describe('Model', function() {
     });
   });
 
+  describe('delete', function() {
+    it('should delete the resource', function(done) {
+      User.id = 'name';
+      request(app).delete('/users/Bob')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.be.true;
+          User.model.findOne({
+            name: 'Bob'
+          }).exec(function(err, doc) {
+            expect(doc).to.be.null;
+            done();
+          });
+        });
+    });
+
+    it('should 404 if the document was not found', function(done) {
+      User.id = 'name';
+      request(app).put('/users/DNE')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.match(/User "DNE" not found/);
+          done();
+        });
+    });
+  });
+
   afterEach(function(done) {
     server.close();
     conn.db.dropDatabase(function(err) {
