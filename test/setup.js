@@ -10,7 +10,11 @@ var restifier = require('../lib/');
 module.exports = function setup(done) {
   var conn = mongoose.createConnection('mongodb://localhost:27017/testdb');
   var User = conn.model('User', new mongoose.Schema({
-    name: String,
+    name: {
+      type: String,
+      unique: true,
+      required: true
+    },
     password: {
       type: String,
       restricted: true
@@ -27,6 +31,7 @@ module.exports = function setup(done) {
 
   var app = express();
 
+  app.use(require('body-parser').json());
   restifier.setup(app);
 
   var UserModel = restifier.model(User).serve(app);

@@ -474,6 +474,39 @@ describe('Model', function() {
     });
   });
 
+  describe('create', function() {
+    it('should create a document', function(done) {
+      User.id = 'name';
+      request(app).post('/users')
+        .send({
+          name: 'Asdflol',
+          hobby: 'Baseball'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('Asdflol');
+          done();
+        });
+    });
+
+    it('should 409 if the document already exists', function(done) {
+      User.id = 'name';
+      request(app).post('/users')
+        .send({
+          name: 'Bob',
+          hobby: 'Soccer'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(409);
+          expect(res.body.message).to.match(/User already exists/);
+          done();
+        });
+    });
+  });
+
+
   describe('get', function() {
     it('should get a document by id', function(done) {
       User.id = 'name';
