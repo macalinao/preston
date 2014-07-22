@@ -506,7 +506,6 @@ describe('Model', function() {
     });
   });
 
-
   describe('get', function() {
     it('should get a document by id', function(done) {
       User.id = 'name';
@@ -522,6 +521,33 @@ describe('Model', function() {
     it('should 404 if the document was not found', function(done) {
       User.id = 'name';
       request(app).get('/users/DNE')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.match(/User "DNE" not found/);
+          done();
+        });
+    });
+  });
+
+  describe('update', function() {
+    it('should change a field', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob')
+        .send({
+          hobby: 'Basketball'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.hobby).to.equal('Basketball');
+          done();
+        });
+    });
+
+    it('should 404 if the document was not found', function(done) {
+      User.id = 'name';
+      request(app).put('/users/DNE')
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
