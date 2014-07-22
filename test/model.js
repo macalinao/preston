@@ -374,6 +374,22 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('should sort descending properly', function(done) {
+        request(app).get('/users')
+          .query({
+            sort: '-name'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            var names = res.body.map(function(user) {
+              return user.name;
+            });
+            expect(names).to.eql(['Tim', 'Freddie', 'Frank', 'Bob', 'Asdf']);
+            done();
+          });
+      });
     });
 
     describe('modifiers', function() {
