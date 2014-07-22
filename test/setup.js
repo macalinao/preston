@@ -22,10 +22,15 @@ module.exports = function setup(done) {
     hobby: String,
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment'
+      ref: 'Comment',
+      correspondsTo: 'author'
     }]
   }));
   var Comment = conn.model('Comment', new mongoose.Schema({
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     content: String
   }));
 
@@ -53,6 +58,7 @@ module.exports = function setup(done) {
     // Add comments for each user
     async.each(['Lol this is funny', 'test', 'asdf'], function(item, next2) {
       var comment = new Comment({
+        author: user,
         content: item
       });
       user.comments.push(comment);
