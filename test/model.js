@@ -356,6 +356,22 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('populate query params should be parsed', function(done) {
+        User.modifyParam('populate', function(req, value) {
+          expect(value).to.eql(['comments', 'test']);
+        });
+        request(app).get('/users')
+          .query({
+            populate: 'comments, test       '
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
     });
 
     describe('transformers', function() {
