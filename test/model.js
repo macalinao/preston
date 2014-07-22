@@ -542,6 +542,17 @@ describe('Model', function() {
           done();
         });
     });
+
+    it('should 404 if the subdocument was not found', function(done) {
+      User.id = 'name';
+      request(app).get('/users/Bob/comments/DNE')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.match(/Comment "DNE" not found/);
+          done();
+        });
+    });
   });
 
   describe('update', function() {
