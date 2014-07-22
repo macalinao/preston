@@ -360,6 +360,20 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('should not sort a restricted field', function(done) {
+        User.restricted.push('comments');
+        request(app).get('/users')
+          .query({
+            sort: 'comments    '
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(401);
+            expect(res.body.message).to.match(/Cannot sort restricted field/);
+            done();
+          });
+      });
     });
 
     describe('modifiers', function() {
