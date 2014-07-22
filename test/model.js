@@ -372,6 +372,25 @@ describe('Model', function() {
             done();
           });
       });
+
+      it('sort query params should be parsed', function(done) {
+        User.modifyParam('sort', function(req, value) {
+          expect(value).to.eql({
+            name: 1,
+            hobby: -1
+          });
+        });
+        request(app).get('/users')
+          .query({
+            sort: 'name, -hobby'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
     });
 
     describe('transformers', function() {
