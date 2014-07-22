@@ -474,6 +474,19 @@ describe('Model', function() {
     });
   });
 
+  describe('get', function() {
+    it('should get a document by id', function(done) {
+      User.id = 'name';
+      request(app).get('/users/Bob')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal('Bob');
+          done();
+        });
+    });
+  });
+
   afterEach(function(done) {
     server.close();
     conn.db.dropDatabase(function(err) {
