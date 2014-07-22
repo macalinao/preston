@@ -53,6 +53,17 @@ describe('Model', function() {
       });
     });
 
+    it('should return a specific subdocument when a param is given', function(done) {
+      request(app).get('/users/Bob/comments').query({
+        reaction: 'BobL'
+      }).end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.body.length).to.equal(1);
+        expect(res.body[0].reaction).to.equal('BobL');
+        done();
+      });
+    });
+
     it('should not return restricted fields', function(done) {
       request(app).get('/users').query({
         name: 'Bob'
