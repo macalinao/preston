@@ -34,7 +34,8 @@ module.exports = function setup(done) {
     content: String,
     reaction: {
       type: String,
-      id: true
+      id: true,
+      unique: true
     }
   }));
 
@@ -60,11 +61,11 @@ module.exports = function setup(done) {
     });
 
     // Add comments for each user
-    async.each(['Lol', 'test', 'asdf'], function(item, next2) {
+    async.each(['Lol', 'test', 'asdf'], function(content, next2) {
       var comment = new Comment({
         author: user,
-        content: item,
-        reaction: item.substring(0, 1).toUpperCase()
+        content: content,
+        reaction: item + content.substring(0, 1).toUpperCase()
       });
       user.comments.push(comment);
       comment.save(next2);

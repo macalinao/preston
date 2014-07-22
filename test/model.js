@@ -505,6 +505,41 @@ describe('Model', function() {
           done();
         });
     });
+
+    it('should create a subdocument', function(done) {
+      User.id = 'name';
+      request(app).post('/users/Bob/comments')
+        .send({
+          content: 'Test',
+          reaction: 'asdf'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.content).to.equal('Test');
+          User.model.findOne({
+            name: 'Bob'
+          }).exec(function(err, bob) {
+            expect(res.body.author).to.equal(bob._id.toString());
+            done();
+          });
+        });
+    });
+
+    it('should 409 if the subdocument already exists', function(done) {
+      User.id = 'name';
+      request(app).post('/users/Bob/comments')
+        .send({
+          content: 'exists',
+          reaction: 'BobL'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(409);
+          expect(res.body.message).to.match(/Comment already exists/);
+          done();
+        });
+    });
   });
 
   describe('get', function() {
@@ -533,12 +568,12 @@ describe('Model', function() {
     it('should get a subdocument by id', function(done) {
       User.id = 'name';
       Comment.id = 'reaction';
-      request(app).get('/users/Bob/comments/L')
+      request(app).get('/users/Bob/comments/BobL')
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(200);
           expect(res.body.content).to.equal('Lol');
-          expect(res.body.reaction).to.equal('L');
+          expect(res.body.reaction).to.equal('BobL');
           User.model.findOne({
             name: 'Bob'
           }).exec(function(err, bob) {
@@ -588,14 +623,14 @@ describe('Model', function() {
 
     it('should change a subdocument field', function(done) {
       User.id = 'name';
-      request(app).put('/users/Bob/comments/L')
+      request(app).put('/users/Bob/comments/BobL')
         .send({
-          content: 'Android L is op'
+          content: 'Android BobL is op'
         })
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(200);
-          expect(res.body.content).to.equal('Android L is op');
+          expect(res.body.content).to.equal('Android BobL is op');
           done();
         });
     });
@@ -642,7 +677,7 @@ describe('Model', function() {
 
     it('should delete the subdocument', function(done) {
       User.id = 'name';
-      request(app).delete('/users/Bob/comments/L')
+      request(app).delete('/users/Bob/comments/BobL')
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(200);
@@ -652,7 +687,7 @@ describe('Model', function() {
           }).exec(function(err, bob) {
             Comment.model.findOne({
               author: bob,
-              reaction: 'L'
+              reaction: 'BobL'
             }).exec(function(err, doc) {
               expect(doc).to.be.null;
               done();
