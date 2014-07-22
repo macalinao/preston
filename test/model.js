@@ -304,10 +304,10 @@ describe('Model', function() {
       });
 
       it('should not populate a restricted field', function(done) {
-        User.restricted.push('comments');
+        User.restricted.push('contacts');
         request(app).get('/users')
           .query({
-            populate: 'comments    '
+            populate: 'contacts  '
           })
           .end(function(err, res) {
             expect(err).to.be.null;
@@ -332,11 +332,11 @@ describe('Model', function() {
       it('should populate a field', function(done) {
         request(app).get('/users')
           .query({
-            populate: 'comments'
+            populate: 'contacts'
           }).end(function(err, res) {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
-            expect(res.body[0].comments.length).to.equal(3);
+            expect(res.body[0].contacts.length).to.equal(4);
             done();
           });
       });
@@ -363,10 +363,10 @@ describe('Model', function() {
       });
 
       it('should not sort a restricted field', function(done) {
-        User.restricted.push('comments');
+        User.restricted.push('contacts');
         request(app).get('/users')
           .query({
-            sort: 'comments    '
+            sort: 'contacts '
           })
           .end(function(err, res) {
             expect(err).to.be.null;
@@ -377,10 +377,10 @@ describe('Model', function() {
       });
 
       it('should not sort a restricted field if any fields are restricted', function(done) {
-        User.restricted.push('comments');
+        User.restricted.push('contacts');
         request(app).get('/users')
           .query({
-            sort: 'comments    , name'
+            sort: 'contacts    , name'
           })
           .end(function(err, res) {
             expect(err).to.be.null;

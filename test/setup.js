@@ -20,10 +20,9 @@ module.exports = function setup(done) {
       restricted: true
     },
     hobby: String,
-    comments: [{
+    contacts: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment',
-      correspondsTo: 'author'
+      ref: 'Contact'
     }]
   }));
   var Comment = conn.model('Comment', new mongoose.Schema({
@@ -38,6 +37,10 @@ module.exports = function setup(done) {
       unique: true
     }
   }));
+  var Contact = conn.model('Contact', new mongoose.Schema({
+    name: String,
+    enable: Boolean
+  }));
 
   var app = express();
 
@@ -45,7 +48,7 @@ module.exports = function setup(done) {
   restifier.setup(app);
 
   var UserModel = restifier.model(User);
-  var CommentModel = UserModel.submodel('comments', Comment);
+  var CommentModel = UserModel.submodel('comments', 'author', Comment);
   app.use(UserModel.middleware());
   app.use(CommentModel.middleware());
   var server = http.createServer(app);
@@ -61,17 +64,32 @@ module.exports = function setup(done) {
     });
 
     // Add comments for each user
-    async.each(['Lol', 'test', 'asdf'], function(content, next2) {
-      var comment = new Comment({
-        author: user,
-        content: content,
-        reaction: item + content.substring(0, 1).toUpperCase()
-      });
-      user.comments.push(comment);
-      comment.save(next2);
-    }, function() {
-      user.save(next);
-    });
+    async.series([
+
+      function(proceed) {
+        async.each(['Lol', 'test', 'asdf'], function(content, next2) {
+            var comment = new Comment({
+              author: user,
+              content: content,
+              reaction: item + content.substring(0, 1).toUpperCase()
+            });
+            comment.save(next2);
+          },
+          proceed);
+      },
+      function(proceed) {
+        async.each(['Skype', 'Gmail', 'Website', 'ICQ'], function(contact, next3) {
+          var ct = new Contact({
+            name: contact
+          });
+          user.contacts.push(ct);
+          ct.save(next3);
+        }, proceed);
+      },
+      function(proceed) {
+        user.save(proceed);
+      }
+    ], next);
   }, done);
 
   return {
