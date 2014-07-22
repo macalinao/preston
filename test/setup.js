@@ -34,8 +34,10 @@ module.exports = function setup(done) {
   app.use(require('body-parser').json());
   restifier.setup(app);
 
-  var UserModel = restifier.model(User).serve(app);
-  var CommentModel = restifier.model(Comment).serve(app);
+  var UserModel = restifier.model(User);
+  var CommentModel = restifier.model(Comment);
+  app.use(UserModel.middleware());
+  app.use(CommentModel.middleware());
   var server = http.createServer(app);
   server.listen(9999);
 
