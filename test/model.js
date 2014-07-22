@@ -539,7 +539,12 @@ describe('Model', function() {
           expect(res.status).to.equal(200);
           expect(res.body.content).to.equal('Lol');
           expect(res.body.reaction).to.equal('L');
-          done();
+          User.model.findOne({
+            name: 'Bob'
+          }).exec(function(err, bob) {
+            expect(res.body.author).to.equal(bob._id.toString());
+            done();
+          });
         });
     });
 
@@ -608,7 +613,7 @@ describe('Model', function() {
   });
 
   describe('delete', function() {
-    it('should delete the resource', function(done) {
+    it('should delete the document', function(done) {
       User.id = 'name';
       request(app).delete('/users/Bob')
         .end(function(err, res) {
@@ -631,6 +636,38 @@ describe('Model', function() {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
           expect(res.body.message).to.match(/User "DNE" not found/);
+          done();
+        });
+    });
+
+    it('should delete the subdocument', function(done) {
+      User.id = 'name';
+      request(app).delete('/users/Bob/comments/L')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.success).to.be.true;
+          User.model.findOne({
+            name: 'Bob'
+          }).exec(function(err, bob) {
+            Comment.model.findOne({
+              author: bob,
+              reaction: 'L'
+            }).exec(function(err, doc) {
+              expect(doc).to.be.null;
+              done();
+            });
+          });
+        });
+    });
+
+    it('should 404 if the subdocument was not found', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob/comments/X')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.match(/Comment "X" not found/);
           done();
         });
     });
