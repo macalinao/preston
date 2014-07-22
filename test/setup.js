@@ -12,6 +12,7 @@ module.exports = function setup(done) {
   var User = conn.model('User', new mongoose.Schema({
     name: {
       type: String,
+      id: true,
       unique: true,
       required: true
     },

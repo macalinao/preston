@@ -34,6 +34,14 @@ describe('Model', function() {
       });
     });
 
+    it('should return all subdocuments with query', function(done) {
+      request(app).get('/users/Bob/comments').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.body.length).to.equal(3);
+        done();
+      });
+    });
+
     it('should return a specific document when a param is given', function(done) {
       request(app).get('/users').query({
         name: 'Bob'
