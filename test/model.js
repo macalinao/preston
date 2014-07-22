@@ -302,6 +302,20 @@ describe('Model', function() {
           });
       });
 
+      it('should not populate a restricted field', function(done) {
+        User.restricted.push('comments');
+        request(app).get('/users')
+          .query({
+            populate: 'comments    '
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(401);
+            expect(res.body.message).to.match(/Cannot populate restricted field/);
+            done();
+          });
+      });
+
       it('should error if the field does not exist', function(done) {
         request(app).get('/users')
           .query({
