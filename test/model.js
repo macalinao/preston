@@ -580,6 +580,31 @@ describe('Model', function() {
           done();
         });
     });
+
+    it('should change a subdocument field', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob/comments/L')
+        .send({
+          content: 'Android L is op'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.content).to.equal('Android L is op');
+          done();
+        });
+    });
+
+    it('should 404 if the subdocument was not found', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob/comments/DNE')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.match(/Comment "DNE" not found/);
+          done();
+        });
+    });
   });
 
   describe('delete', function() {
