@@ -286,6 +286,22 @@ describe('Model', function() {
     });
 
     describe('populate', function() {
+      it('populate query params should be parsed', function(done) {
+        User.modifyParam('populate', function(req, value) {
+          expect(value).to.eql(['comments', 'test']);
+        });
+        request(app).get('/users')
+          .query({
+            populate: 'comments, test       '
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
+            done();
+          });
+      });
+
       it('should error if the field does not exist', function(done) {
         request(app).get('/users')
           .query({
@@ -306,6 +322,27 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
             expect(res.body[0].comments.length).to.equal(3);
+            done();
+          });
+      });
+    });
+
+    describe('sort', function() {
+      it('sort query params should be parsed', function(done) {
+        User.modifyParam('sort', function(req, value) {
+          expect(value).to.eql({
+            name: 1,
+            hobby: -1
+          });
+        });
+        request(app).get('/users')
+          .query({
+            sort: 'name, -hobby'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(5);
             done();
           });
       });
@@ -353,41 +390,6 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
             expect(res.body.length).to.equal(0);
-            done();
-          });
-      });
-
-      it('populate query params should be parsed', function(done) {
-        User.modifyParam('populate', function(req, value) {
-          expect(value).to.eql(['comments', 'test']);
-        });
-        request(app).get('/users')
-          .query({
-            populate: 'comments, test       '
-          })
-          .end(function(err, res) {
-            expect(err).to.be.null;
-            expect(res.status).to.equal(200);
-            expect(res.body.length).to.equal(5);
-            done();
-          });
-      });
-
-      it('sort query params should be parsed', function(done) {
-        User.modifyParam('sort', function(req, value) {
-          expect(value).to.eql({
-            name: 1,
-            hobby: -1
-          });
-        });
-        request(app).get('/users')
-          .query({
-            sort: 'name, -hobby'
-          })
-          .end(function(err, res) {
-            expect(err).to.be.null;
-            expect(res.status).to.equal(200);
-            expect(res.body.length).to.equal(5);
             done();
           });
       });
