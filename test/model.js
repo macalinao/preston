@@ -10,7 +10,7 @@ var restifier = require('../lib/');
 var setup = require('./setup');
 
 describe('Model', function() {
-  var app, conn, server, User;
+  var app, conn, server, User, Comment;
 
   beforeEach(function(done) {
     var ret = setup(done);
@@ -18,6 +18,7 @@ describe('Model', function() {
     conn = ret.conn;
     server = ret.server;
     User = ret.User;
+    Comment = ret.Comment;
   });
 
   it('should detect restricted fields in a schema', function() {
@@ -525,6 +526,19 @@ describe('Model', function() {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
           expect(res.body.message).to.match(/User "DNE" not found/);
+          done();
+        });
+    });
+
+    it('should get a subdocument by id', function(done) {
+      User.id = 'name';
+      Comment.id = 'reaction';
+      request(app).get('/users/Bob/comments/L')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.content).to.equal('Lol');
+          expect(res.body.reaction).to.equal('L');
           done();
         });
     });

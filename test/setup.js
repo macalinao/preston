@@ -31,7 +31,11 @@ module.exports = function setup(done) {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    content: String
+    content: String,
+    reaction: {
+      type: String,
+      id: true
+    }
   }));
 
   var app = express();
@@ -40,7 +44,7 @@ module.exports = function setup(done) {
   restifier.setup(app);
 
   var UserModel = restifier.model(User);
-  var CommentModel = restifier.model(Comment);
+  var CommentModel = UserModel.submodel('comments', Comment);
   app.use(UserModel.middleware());
   app.use(CommentModel.middleware());
   var server = http.createServer(app);
@@ -56,10 +60,11 @@ module.exports = function setup(done) {
     });
 
     // Add comments for each user
-    async.each(['Lol this is funny', 'test', 'asdf'], function(item, next2) {
+    async.each(['Lol', 'test', 'asdf'], function(item, next2) {
       var comment = new Comment({
         author: user,
-        content: item
+        content: item,
+        reaction: item.substring(0, 1).toUpperCase()
       });
       user.comments.push(comment);
       comment.save(next2);
@@ -72,6 +77,7 @@ module.exports = function setup(done) {
     app: app,
     conn: conn,
     server: server,
-    User: UserModel
+    User: UserModel,
+    Comment: CommentModel
   };
 };
