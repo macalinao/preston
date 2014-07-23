@@ -666,7 +666,7 @@ describe('Model', function() {
     });
   });
 
-  describe('delete', function() {
+  describe('destroy', function() {
     it('should delete the document', function(done) {
       User.id = 'name';
       request(app).delete('/users/Bob')
