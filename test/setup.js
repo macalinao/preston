@@ -50,7 +50,32 @@ module.exports = function setup(done) {
 
   var UserModel = restifier.model(User);
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
-  app.use(UserModel.middleware());
+  app.use(UserModel
+    .use('all', function(req, res, next) {
+      res.set('Middleware-All', 'true');
+      next();
+    })
+    .use('query', function(req, res, next) {
+      res.set('Middleware-Query', 'true');
+      next();
+    })
+    .use('create', function(req, res, next) {
+      res.set('Middleware-Create', 'true');
+      next();
+    })
+    .use('get', function(req, res, next) {
+      res.set('Middleware-Get', 'true');
+      next();
+    })
+    .use('update', function(req, res, next) {
+      res.set('Middleware-Update', 'true');
+      next();
+    })
+    .use('destroy', function(req, res, next) {
+      res.set('Middleware-Destroy', 'true');
+      next();
+    })
+    .middleware());
   app.use(CommentModel.middleware());
   var server = http.createServer(app);
   server.listen(9999);

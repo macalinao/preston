@@ -492,6 +492,21 @@ describe('Model', function() {
           });
       });
     });
+
+    it('should have used appropriate middlewares', function(done) {
+      User.id = 'name';
+      request(app).get('/users')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-all']).to.equal('true');
+          expect(res.header['middleware-query']).to.equal('true');
+          expect(res.header['middleware-create']).to.be.undefined;
+          expect(res.header['middleware-get']).to.be.undefined;
+          expect(res.header['middleware-update']).to.be.undefined;
+          expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
   });
 
   describe('create', function() {
@@ -559,6 +574,25 @@ describe('Model', function() {
           done();
         });
     });
+
+    it('should have used appropriate middlewares', function(done) {
+      User.id = 'name';
+      request(app).post('/users')
+        .send({
+          content: 'exists',
+          reaction: 'BobL'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-all']).to.equal('true');
+          expect(res.header['middleware-query']).to.be.undefined;
+          expect(res.header['middleware-create']).to.equal('true');
+          expect(res.header['middleware-get']).to.be.undefined;
+          expect(res.header['middleware-update']).to.be.undefined;
+          expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
   });
 
   describe('get', function() {
@@ -609,6 +643,21 @@ describe('Model', function() {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
           expect(res.body.message).to.match(/Comment "DNE" not found/);
+          done();
+        });
+    });
+
+    it('should have used appropriate middlewares', function(done) {
+      User.id = 'name';
+      request(app).get('/users/Bob')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-all']).to.equal('true');
+          expect(res.header['middleware-query']).to.be.undefined;
+          expect(res.header['middleware-create']).to.be.undefined;
+          expect(res.header['middleware-get']).to.equal('true');
+          expect(res.header['middleware-update']).to.be.undefined;
+          expect(res.header['middleware-destroy']).to.be.undefined;
           done();
         });
     });
@@ -664,6 +713,21 @@ describe('Model', function() {
           done();
         });
     });
+
+    it('should have used appropriate middlewares', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-all']).to.equal('true');
+          expect(res.header['middleware-query']).to.be.undefined;
+          expect(res.header['middleware-create']).to.be.undefined;
+          expect(res.header['middleware-get']).to.be.undefined;
+          expect(res.header['middleware-update']).to.equal('true');
+          expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
   });
 
   describe('destroy', function() {
@@ -685,7 +749,7 @@ describe('Model', function() {
 
     it('should 404 if the document was not found', function(done) {
       User.id = 'name';
-      request(app).put('/users/DNE')
+      request(app).delete('/users/DNE')
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
@@ -717,11 +781,26 @@ describe('Model', function() {
 
     it('should 404 if the subdocument was not found', function(done) {
       User.id = 'name';
-      request(app).put('/users/Bob/comments/X')
+      request(app).delete('/users/Bob/comments/X')
         .end(function(err, res) {
           expect(err).to.be.null;
           expect(res.status).to.equal(404);
           expect(res.body.message).to.match(/Comment "X" not found/);
+          done();
+        });
+    });
+
+    it('should have used appropriate middlewares', function(done) {
+      User.id = 'name';
+      request(app).delete('/users/Bob')
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-all']).to.equal('true');
+          expect(res.header['middleware-query']).to.be.undefined;
+          expect(res.header['middleware-create']).to.be.undefined;
+          expect(res.header['middleware-get']).to.be.undefined;
+          expect(res.header['middleware-update']).to.be.undefined;
+          expect(res.header['middleware-destroy']).to.equal('true');
           done();
         });
     });
