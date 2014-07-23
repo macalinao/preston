@@ -14,22 +14,22 @@ $ npm install mongoose-restifier
 
 ## Example
 
-To serve a model on a REST api, you must use the `restifier.model()` function to serve on Express.
+The following example serves the `User` and `Page` models on a RESTful API.
 
 ```js
+var express = require('express');
 var restifier = require('mongoose-restifier');
+var models = require('./models'); // Your mongoose models would be loaded here
 
-restifier.model(mongoose.model('User'))
-    .constrain('limit', function(req, num) {
-      return num ? Math.min(num, 50) : 50; // Limit number of returned results to 50
-      })
-    .constrain('password', function(req, pass) {
-      return pass ? null : pass; // If a password parameter was in the query, remove it.
-      })
-    .filter('myposts', function(query, req) { // A filter to get the requester's posts
-      query.where('author').equals(req.user._id);
-    })
-    .serve(app));
+var app = express();
+
+app.use(require('body-parser').json()); // Required
+
+app.use(restifier.initialize()); // Sets up restifier
+app.use(restifier.model(mongoose.model('User')).middleware());
+app.use(restifier.model(mongoose.model('Page')).middleware());
+
+app.listen(3000);
 ```
 
 ## Querying
