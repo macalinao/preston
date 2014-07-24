@@ -1,5 +1,4 @@
-var expect = require('chai').expect,
-    mongooseRestifier = require('..');
+var expect = require('chai').expect;
+var restifier = require('..');
 
-describe('mongoose-restifier', function() {
-});
+describe('restifier', function() {});

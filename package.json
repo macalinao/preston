@@ -1,5 +1,5 @@
 {
-  "name": "mongoose-restifier",
+  "name": "restifier",
   "version": "1.0.0",
   "description": "Serves Mongoose models on a flexible, RESTful API.",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/simplyianm/mongoose-restifier"
+    "url": "https://github.com/simplyianm/restifier"
   },
   "keywords": [
     "mongoose",
@@ -21,7 +21,7 @@
   "author": "Ian Macalinao <me@ian.pw>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/simplyianm/mongoose-restifier/issues"
+    "url": "https://github.com/simplyianm/restifier/issues"
   },
   "dependencies": {
     "express": "^4.6.1",
