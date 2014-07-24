@@ -26,8 +26,8 @@ var app = express();
 app.use(require('body-parser').json()); // Required
 
 app.use(restifier.initialize()); // Sets up restifier
-app.use(restifier.model(mongoose.model('User')).middleware());
-app.use(restifier.model(mongoose.model('Page')).middleware());
+app.use(restifier(mongoose.model('User')).middleware());
+app.use(restifier(mongoose.model('Page')).middleware());
 
 app.listen(3000);
 ```
