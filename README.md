@@ -33,62 +33,65 @@ app.use(restifier(mongoose.model('Page')).middleware());
 app.listen(3000);
 ```
 
-## Querying
+## API Usage
 
-The path uses the MongoDB collection name, so the `User` model would create routes under `/users`.
+Restifier uses the MongoDB collection name to determine the name of the base route, so the `User` model would create routes under `/users`.
+
+### Query
+
+Querying takes in the following parameters:
+* `field` - Replace `field` with any field in your Mongoose model, and it will check for equality.
+* `populate` - Comma-delimited list of fields to populate
+* `sort` - Sorts by the given fields in the given order, comma delimited. A `-` sign will sort descending.
+* `limit` - Limits the number of returned results.
+* `skip` - Skips a number of results. Useful for pagination when combined with `limit`.
+* `filter` - Applies a filter. See the Filters section for more details.
 
 ```
 GET /users
-```
-
-### Equality
-
-Checking for equality is as simple as setting the parameter equal to the value.
-
-```
-GET /users?param=value
-```
-
-### Sort
-
-The `sort` parameter takes a comma-delimited array of field names. A `-` prefix denotes a descending order.
-
-```
-GET /users?sort=field,-field2
-```
-
-`field` would be sorted ascending, and `field2` is sorted descending.
-
-### Limit/Skip
-
-The limit/skip parameters (useful for pagination) are pretty self-explanatory.
-
-```
-GET /users?limit=10&skip=10
-```
-
-### Population
-
-Takes a comma-delimited array of fields to populate.
-
-```
+GET /users?field=value
 GET /users?populate=posts,comments
+GET /users?sort=field,-field2
+GET /users?limit=10&skip=10
+GET /users?filter=filter1|filter2
+GET /users/Bob/badges?sort=date
+```
+
+### Create
+
+```
+POST /users
+POST /users/Bob/badges
+```
+
+### Get
+
+Get supports one parameter, the `populate` field.
+
+```
+GET /users/Bob
+GET /users/Bob?populate=posts
+GET /users/Bob/badges/1
+GET /users/Bob/badges/1?populate=things
+```
+
+### Update
+
+```
+PUT /users/Bob
+PATCH /users/Bob
+PUT /users/Bob/badges/1
+PATCH /users/Bob/badges/1
+```
+
+### Destroy
+
+```
+DELETE /users/Bob
+DELETE /users/Bob/badges/1
 ```
 
 ### Filters
 
 Anything more complicated than the use cases above should use a filter. A filter is a function which modifies the query.
 Filters are applied to the query before the parameters listed above are.
-There are several filters built into `restifier`, which will be listed below.
-
-#### Comparison Filters
-These are modeled off of the [MongoDB Comparison Query Operators](http://docs.mongodb.org/manual/reference/operator/query-comparison/).
-
-* `gt <field> <value>` - Matches where the field is greater than the given value.
-* `gte <field> <value>` - Matches where the field is greater than the given value.
-* `in <field> <value>` - Matches where the field is greater than the given value.
-* `lt <field> <value>` - Matches where the field is greater than the given value.
-* `lte <field> <value>` - Matches where the field is greater than the given value.
-* `ne <field> <value>` - Matches where the field is greater than the given value.
-* `nin <field> <value>` - Matches where the field is greater than the given value.
-
