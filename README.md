@@ -33,7 +33,21 @@ app.use(restifier(mongoose.model('Page')).middleware());
 app.listen(3000);
 ```
 
-## API Usage
+## The Query Pipeline
+Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.
+
+```
+Modifiers --> Limit/Skip/Sort/Fields --> Filters --> Population --> Execution --> Transformers
+```
+
+## Configuring Restifier
+
+### Filters
+
+A filter is a function which modifies the Mongoose query.
+Filters are applied to the query before the parameters listed above are.
+
+## REST API
 
 Restifier uses the MongoDB collection name to determine the name of the base route, so the `User` model would create routes under `/users`.
 
@@ -91,7 +105,3 @@ DELETE /users/Bob
 DELETE /users/Bob/badges/1
 ```
 
-### Filters
-
-Anything more complicated than the use cases above should use a filter. A filter is a function which modifies the query.
-Filters are applied to the query before the parameters listed above are.
