@@ -1,6 +1,6 @@
 {
   "name": "restifier",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Serves Mongoose models on a flexible, RESTful API.",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "angularjs"
   ],
   "author": "Ian Macalinao <me@ian.pw>",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/simplyianm/restifier/issues"
   },
