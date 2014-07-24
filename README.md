@@ -1,15 +1,15 @@
-# mongoose-restifier
+# restifier
 
 Serves Mongoose models on an extensible RESTful API.
 
-[![build status](https://secure.travis-ci.org/simplyianm/mongoose-restifier.png)](http://travis-ci.org/simplyianm/mongoose-restifier)
+[![build status](https://secure.travis-ci.org/simplyianm/restifier.png)](http://travis-ci.org/simplyianm/restifier)
 
 ## Installation
 
 This module is installed via npm:
 
 ```bash
-$ npm install mongoose-restifier
+$ npm install restifier
 ```
 
 ## Example
@@ -18,7 +18,7 @@ The following example serves the `User` and `Page` models on a RESTful API.
 
 ```js
 var express = require('express');
-var restifier = require('mongoose-restifier');
+var restifier = require('restifier');
 var models = require('./models'); // Your mongoose models would be loaded here
 
 var app = express();
@@ -78,7 +78,7 @@ GET /users?populate=posts,comments
 
 Anything more complicated than the use cases above should use a filter. A filter is a function which modifies the query.
 Filters are applied to the query before the parameters listed above are.
-There are several filters built into `mongoose-restifier`, which will be listed below.
+There are several filters built into `restifier`, which will be listed below.
 
 #### Comparison Filters
 These are modeled off of the [MongoDB Comparison Query Operators](http://docs.mongodb.org/manual/reference/operator/query-comparison/).
