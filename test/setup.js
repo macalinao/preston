@@ -46,7 +46,7 @@ module.exports = function setup(done) {
   var app = express();
 
   app.use(require('body-parser').json());
-  app.use(restifier.initialize());
+  app.use(restifier());
 
   var UserModel = restifier(User);
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
