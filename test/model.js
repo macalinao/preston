@@ -661,6 +661,46 @@ describe('Model', function() {
           done();
         });
     });
+
+    describe('populate', function() {
+      it('should not populate a restricted field', function(done) {
+        User.restricted.push('contacts');
+        request(app).get('/users/Bob')
+          .query({
+            populate: 'contacts  '
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(401);
+            expect(res.body.message).to.match(/Cannot populate restricted field/);
+            done();
+          });
+      });
+
+      it('should error if the field does not exist', function(done) {
+        request(app).get('/users/Bob')
+          .query({
+            populate: 'dne'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/does not exist/);
+            done();
+          });
+      });
+
+      it('should populate a field', function(done) {
+        request(app).get('/users/Bob')
+          .query({
+            populate: 'contacts'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body.contacts.length).to.equal(4);
+            done();
+          });
+      });
+    });
   });
 
   describe('update', function() {
