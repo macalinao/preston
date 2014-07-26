@@ -24,6 +24,7 @@
     "url": "https://github.com/simplyianm/restifier/issues"
   },
   "dependencies": {
+    "chain-middleware": "^1.0.1",
     "express": "^4.6.1",
     "res-error": "~0.2.0"
   },
