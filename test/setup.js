@@ -45,6 +45,8 @@ module.exports = function setup(done) {
 
   var app = express();
 
+  restifier.reset();
+
   app.use(require('body-parser').json());
   app.use(restifier());
 
