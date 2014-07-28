@@ -94,7 +94,7 @@ GET /people?filter=children | proximity 5
 ```
 
 ### Population
-Fields that were marked for population in the query are now populated. TODO: Security
+Fields that were marked for population in the query are now populated. You can change what fields are returned using [population transformers](#population-transformers).
 
 ### Execution
 At this point in the pipeline, `query.exec()` is called and we query the database.
@@ -111,6 +111,16 @@ model.transform(function(req, doc) {
 ```
 
 Transformers are applied to each individual document in a query result.
+
+#### Population Transformers
+Population transformers are transformers that operate on populated fields. They can be used to make your application more secure by removing fields you don't want people to see.
+
+```js
+model.transformPopulate('owners', function(req, doc) {
+  delete doc._id;
+  delete doc.password;
+});
+```
 
 ## Configuring Restifier
 

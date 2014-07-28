@@ -108,7 +108,8 @@ module.exports = function setup(done) {
       function(proceed) {
         async.each(['Skype', 'Gmail', 'Website', 'ICQ'], function(contact, next3) {
           var ct = new Contact({
-            name: contact
+            name: contact,
+            enable: true
           });
           user.contacts.push(ct);
           ct.save(next3);

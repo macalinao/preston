@@ -356,6 +356,25 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(200);
             expect(res.body[0].contacts.length).to.equal(4);
+            expect(res.body[0].contacts[0].name).to.not.be.null;
+            expect(res.body[0].contacts[0].enable).to.not.be.undefined;
+            done();
+          });
+      });
+      
+      it('should allow transforming population', function(done) {
+        User.transformPopulate('contacts', function(req, doc) {
+          delete doc.enable;
+        });
+        request(app).get('/users')
+          .query({
+            populate: 'contacts'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body[0].contacts.length).to.equal(4);
+            expect(res.body[0].contacts[0].name).to.not.be.null;
+            expect(res.body[0].contacts[0].enable).to.be.undefined;
             done();
           });
       });
