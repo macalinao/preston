@@ -103,6 +103,17 @@ Fields that were marked for population in the query are now populated. TODO: Sec
 At this point in the pipeline, `query.exec()` is called and we query the database.
 
 ### Transformers
+Transformers change the returned results. One transformer is built in, the `restricted` transformer, and cannot be changed. Here is an example of using a transformer:
+
+```
+model.transform(function(req, doc) {
+  delete doc._id;
+  delete doc.password;
+  doc.type = 'This is a string that isn\'t in the database!';
+});
+```
+
+Transformers are applied to each individual document in a query result.
 
 ## Configuring Restifier
 
