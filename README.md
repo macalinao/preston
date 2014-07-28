@@ -76,14 +76,14 @@ There are 4 types of parameters: limit, skip, sort, and field equality. These ar
 Filters are user-defined functions that modify the query. They work very similarly to AngularJS filters. They can be chained and take parameters, allowing immense flexibility for developers to add features to APIs.
 
 Filters are defined as follows:
-```
+```js
 model.filter('children', function(req, query) {
   query.where('age').lt(18);
 });
 ```
 
 Here is an example of a filter that takes parameters:
-```
+```js
 model.filter('proximity', function(req, query, distance) {
   query.where('location').maxDistance(distance);
 });
@@ -105,7 +105,7 @@ At this point in the pipeline, `query.exec()` is called and we query the databas
 ### Transformers
 Transformers change the returned results. One transformer is built in, the `restricted` transformer, and cannot be changed. Here is an example of using a transformer:
 
-```
+```js
 model.transform(function(req, doc) {
   delete doc._id;
   delete doc.password;
