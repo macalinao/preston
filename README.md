@@ -73,6 +73,28 @@ The `populate` parameter looks like this:
 There are 4 types of parameters: limit, skip, sort, and field equality. These are all described in the [Query](#Query) section.
 
 ### Filters
+Filters are user-defined functions that modify the query. They work very similarly to AngularJS filters. They can be chained and take parameters, allowing immense flexibility for developers to add features to APIs.
+
+Filters are defined as follows:
+```
+model.filter('children', function(req, query) {
+  query.where('age').lt(18);
+});
+```
+
+Here is an example of a filter that takes parameters:
+```
+model.filter('proximity', function(req, query, distance) {
+  query.where('location').maxDistance(distance);
+});
+```
+This filter would be called using `proximity 5` if one wanted to check if the location was within a distance of 5.
+
+Chaining filters is pretty simple; just use the `|` (pipe) operator to do so.
+
+```
+GET /people?filter=children | proximity 5
+```
 
 ### Population
 Fields that were marked for population in the query are now populated. TODO: Security
