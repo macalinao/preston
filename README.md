@@ -170,3 +170,5 @@ DELETE /users/Bob
 DELETE /users/Bob/badges/1
 ```
 
+## License
+Copyright (c) 2014 Ian Macalinao. Released under the MIT License, which can be viewed in the attached `LICENSE` file.
