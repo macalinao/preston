@@ -37,8 +37,40 @@ app.listen(3000);
 Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.
 
 ```
-Modifiers --> Limit/Skip/Sort/Fields --> Filters --> Population --> Execution --> Transformers
+Modifiers --> Parameters --> Filters --> Population --> Execution --> Transformers
 ```
+
+### Modifiers
+Modifiers alter the query parameters that will be passed to the pipeline. For example, you could have a modifier that forces sorting by name ascending, as shown below:
+
+```js
+model.modifyParam('sort', function(req, value) {
+  value.name = 1;
+  return value;
+});
+```
+
+To modify a parameter, just pass the name of the parameter you wish to modify and a callback that returns the modified value of the parameter.
+
+`sort` and `populate` are the only parameters that are objects.
+
+The `sort` parameter looks like this:
+
+```js
+{
+  name: 1, // Ascending
+  date: -1 // Descending
+}
+```
+
+The `populate` parameter looks like this:
+
+```js
+['users', 'comments', 'posts']
+```
+
+### Parameters
+There are 4 types of parameters: limit, skip, sort, and field equality. These are all described in the [Query](#Query) section.
 
 ## Configuring Restifier
 
