@@ -10,7 +10,7 @@ Serves Mongoose models on an extensible RESTful API.
 This module is installed via npm:
 
 ```bash
-$ npm install restifier
+$ npm install restifier --save
 ```
 
 ## Example
