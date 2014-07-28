@@ -1,12 +1,10 @@
 # restifier
-
 Serves Mongoose models on an extensible RESTful API.
 
 [![Stories in Ready](https://badge.waffle.io/simplyianm/restifier.png?label=ready&title=Ready)](https://waffle.io/simplyianm/restifier)
 [![build status](https://secure.travis-ci.org/simplyianm/restifier.png)](http://travis-ci.org/simplyianm/restifier)
 
 ## Installation
-
 This module is installed via npm:
 
 ```bash
@@ -14,7 +12,6 @@ $ npm install restifier --save
 ```
 
 ## Example
-
 The following example serves the `User` and `Page` models on a RESTful API.
 
 ```js
@@ -144,14 +141,12 @@ GET /users/Bob/badges?sort=date
 ```
 
 ### Create
-
 ```
 POST /users
 POST /users/Bob/badges
 ```
 
 ### Get
-
 Get supports one parameter, the `populate` field.
 
 ```
@@ -162,7 +157,6 @@ GET /users/Bob/badges/1?populate=things
 ```
 
 ### Update
-
 ```
 PUT /users/Bob
 PATCH /users/Bob
@@ -171,7 +165,6 @@ PATCH /users/Bob/badges/1
 ```
 
 ### Destroy
-
 ```
 DELETE /users/Bob
 DELETE /users/Bob/badges/1
