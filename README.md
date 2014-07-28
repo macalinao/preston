@@ -67,7 +67,7 @@ The `populate` parameter looks like this:
 ```
 
 ### Parameters
-There are 4 types of parameters: limit, skip, sort, and field equality. These are all described in the [Query](#Query) section.
+There are 4 types of parameters: limit, skip, sort, and field equality. These are all described in the [Query](#query) section.
 
 ### Filters
 Filters are user-defined functions that modify the query. They work very similarly to AngularJS filters. They can be chained and take parameters, allowing immense flexibility for developers to add features to APIs.
