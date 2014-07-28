@@ -72,19 +72,26 @@ The `populate` parameter looks like this:
 ### Parameters
 There are 4 types of parameters: limit, skip, sort, and field equality. These are all described in the [Query](#Query) section.
 
+### Filters
+
+### Population
+Fields that were marked for population in the query are now populated. TODO: Security
+
+### Execution
+At this point in the pipeline, `query.exec()` is called and we query the database.
+
+### Transformers
+
 ## Configuring Restifier
 
 ### Filters
-
 A filter is a function which modifies the Mongoose query.
 Filters are applied to the query before the parameters listed above are.
 
 ## REST API
-
 Restifier uses the MongoDB collection name to determine the name of the base route, so the `User` model would create routes under `/users`.
 
 ### Query
-
 Querying takes in the following parameters:
 * `field` - Replace `field` with any field in your Mongoose model, and it will check for equality.
 * `populate` - Comma-delimited list of fields to populate
