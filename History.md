@@ -1,3 +1,8 @@
+0.1.4
+=====
+* Add id property to returned models
+* Fix thrown errors when populating in the doc fetcher
+
 0.1.3
 =====
 * Update res-error
