@@ -44,20 +44,33 @@ describe('restifier', function() {
   });
 
   describe('quick initialize', function() {
-    it('should add the appropriate error handlers', function() {
+    it('should add the appropriate error handlers', function(done) {
       app.use(restifier());
       app.use(restifier(User, Post));
-      server = http.createServer(app);
-      server.listen(9999);
+      app.use(restifier.finish());
 
       request(app).get('/users/Bobb').end(function(err, res) {
         expect(err).to.be.null;
         expect(res.body.message).to.match(/not found/);
+        done();
       });
     });
   });
 
-  afterEach(function() {
-    server.close();
+  describe('405', function() {
+    beforeEach(function() {
+      app.use(restifier());
+      app.use(restifier(User, Post));
+      app.use(restifier.finish());
+    });
+
+    it('should not allow PUT collection', function(done) {
+      request(app).put('/users').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(405);
+        expect(res.body.message).to.match(/PUT/);
+        done();
+      });
+    });
   });
 });
