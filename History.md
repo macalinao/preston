@@ -1,3 +1,7 @@
+0.1.7
+=====
+* Add 405 JSON handler for missing methods.
+
 0.1.6
 =====
 * Fixed tests
