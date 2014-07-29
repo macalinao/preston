@@ -72,5 +72,32 @@ describe('restifier', function() {
         done();
       });
     });
+
+    it('should not allow PATCH collection', function(done) {
+      request(app).patch('/users').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(405);
+        expect(res.body.message).to.match(/PATCH/);
+        done();
+      });
+    });
+
+    it('should not allow DELETE collection', function(done) {
+      request(app).delete('/users').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(405);
+        expect(res.body.message).to.match(/DELETE/);
+        done();
+      });
+    });
+
+    it('should not allow POST doc', function(done) {
+      request(app).post('/users/Bob').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(405);
+        expect(res.body.message).to.match(/POST/);
+        done();
+      });
+    });
   });
 });
