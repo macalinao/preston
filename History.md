@@ -1,3 +1,7 @@
+0.1.5
+=====
+* Fix small bug where id field was wrong
+
 0.1.4
 =====
 * Add id property to returned models

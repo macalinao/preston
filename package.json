@@ -1,6 +1,6 @@
 {
   "name": "restifier",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Serves Mongoose models on a flexible, RESTful API.",
   "main": "index.js",
   "scripts": {
