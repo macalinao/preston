@@ -1,3 +1,7 @@
+0.1.3
+=====
+* Update res-error
+
 0.1.2
 =====
 * Add population transformers
