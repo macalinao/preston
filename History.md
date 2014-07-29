@@ -1,3 +1,8 @@
+0.1.6
+=====
+* Fixed tests
+* Made a pact with myself to always test first
+
 0.1.5
 =====
 * Fix small bug where id field was wrong
