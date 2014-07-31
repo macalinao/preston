@@ -23,9 +23,8 @@ var app = express();
 
 app.use(require('body-parser').json()); // Required
 
-app.use(restifier()); // Sets up restifier
-app.use(restifier(mongoose.model('User')).middleware());
-app.use(restifier(mongoose.model('Page')).middleware());
+restifier(mongoose.model('User'), mongoose.model('Page')); // Add models
+app.use('/api', restifier.middleware()); // Serve the api on /api
 
 app.listen(3000);
 ```
