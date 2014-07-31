@@ -48,11 +48,9 @@ module.exports = function setup(done) {
   restifier.reset();
 
   app.use(require('body-parser').json());
-  app.use(restifier());
 
   var UserModel = restifier(User);
-  var CommentModel = UserModel.submodel('comments', 'author', Comment);
-  app.use(UserModel
+  UserModel
     .use('all', function(req, res, next) {
       res.set('Middleware-All', 'true');
       next();
@@ -76,9 +74,10 @@ module.exports = function setup(done) {
     .use('destroy', function(req, res, next) {
       res.set('Middleware-Destroy', 'true');
       next();
-    })
-    .middleware());
-  app.use(CommentModel.middleware());
+    });
+  var CommentModel = UserModel.submodel('comments', 'author', Comment);
+
+  app.use(restifier.middleware());
 
   var users = {};
 
