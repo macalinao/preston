@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "express": "^4.6.1",
+    "lodash": "^2.4.1",
     "res-error": "^0.3.1"
   },
   "devDependencies": {

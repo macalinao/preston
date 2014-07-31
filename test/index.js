@@ -57,6 +57,21 @@ describe('restifier', function() {
     });
   });
 
+  describe('#middleware', function() {
+    beforeEach(function() {
+      restifier(User, Post);
+      app.use(restifier.middleware());
+    });
+
+    it('should add the appropriate error handlers', function(done) {
+      request(app).get('/users/Bobb').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.body.message).to.match(/not found/);
+        done();
+      });
+    });
+  });
+
   describe('405', function() {
     beforeEach(function() {
       app.use(restifier());
