@@ -121,12 +121,6 @@ model.transformPopulate('owners', function(req, doc) {
 });
 ```
 
-## Configuring Restifier
-
-### Filters
-A filter is a function which modifies the Mongoose query.
-Filters are applied to the query before the parameters listed above are.
-
 ## REST API
 Restifier uses the MongoDB collection name to determine the name of the base route, so the `User` model would create routes under `/users`.
 
