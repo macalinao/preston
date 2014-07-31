@@ -79,8 +79,6 @@ module.exports = function setup(done) {
     })
     .middleware());
   app.use(CommentModel.middleware());
-  var server = http.createServer(app);
-  server.listen(9999);
 
   var users = {};
 
@@ -124,7 +122,6 @@ module.exports = function setup(done) {
   return {
     app: app,
     conn: conn,
-    server: server,
     User: UserModel,
     Comment: CommentModel
   };

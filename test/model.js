@@ -10,13 +10,12 @@ var restifier = require('../lib/');
 var setup = require('./setup');
 
 describe('Model', function() {
-  var app, conn, server, User, Comment;
+  var app, conn, User, Comment;
 
   beforeEach(function(done) {
     var ret = setup(done);
     app = ret.app;
     conn = ret.conn;
-    server = ret.server;
     User = ret.User;
     Comment = ret.Comment;
   });
@@ -867,7 +866,6 @@ describe('Model', function() {
   });
 
   afterEach(function(done) {
-    server.close();
     conn.db.dropDatabase(function(err) {
       done(err);
     });
