@@ -1,3 +1,8 @@
+0.1.8
+=====
+* Add restifier.middleware() method
+* Make restifier possess all methods of RestAPI
+
 0.1.7
 =====
 * Add 405 JSON handler for missing methods.
