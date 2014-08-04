@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-gh-pages');
   grunt.loadNpmTasks('grunt-mocha-test');
 
   grunt.initConfig({
@@ -20,6 +21,12 @@ module.exports = function(grunt) {
           configure: 'jsdoc.conf.json'
         }
       }
+    },
+    'gh-pages': {
+      options: {
+        base: 'docs'
+      },
+      src: ['**']
     }
   });
 
