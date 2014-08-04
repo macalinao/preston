@@ -24,7 +24,7 @@ var app = express();
 app.use(require('body-parser').json()); // Required
 
 restifier(mongoose.model('User'), mongoose.model('Page')); // Add models
-app.use('/api', restifier.middleware()); // Serve the api on /api
+app.use('/api', restifier.middleware()); // Serve the api on /api.
 
 app.listen(3000);
 ```
@@ -80,6 +80,25 @@ PATCH /users/Bob/badges/1
 DELETE /users/Bob
 DELETE /users/Bob/badges/1
 ```
+
+## Creating an API
+First, declare all of your models using `restifier(mongooseModel)`. This function returns a `Model` object which can be altered. (see the JSDocs)
+
+Next, serve the API as middleware:
+
+```
+app.use('/api', restifier.middleware());
+```
+
+This will create a middleware that will be used by Express. In the case of namespace collision, routes are handled sequentially by Express. Declare your custom routes
+before using the middleware. For example:
+
+```
+app.post('/api/login', myLoginHandler);
+app.use('/api', restifier.middleware());
+```
+
+is the appropriate way to add functionality to your API.
 
 ## The Query Pipeline
 Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.
