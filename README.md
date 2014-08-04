@@ -1,4 +1,4 @@
-# restifier
+# Restifier
 Serves Mongoose models on an extensible RESTful API.
 
 [![Stories in Ready](https://badge.waffle.io/simplyianm/restifier.png?label=ready&title=Ready)](https://waffle.io/simplyianm/restifier)
