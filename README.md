@@ -1,7 +1,7 @@
 # Restifier
 Serves Mongoose models on an extensible RESTful API.
 
-<img src="http://m2.i.pbase.com/u26/chonchat/upload/31626102.IMG_6580.jpg" width="400" alt="A RESTing Mongoose" align="right">
+<img src="http://m2.i.pbase.com/u26/chonchat/upload/31626102.IMG_6580.jpg" width="200" alt="A RESTing Mongoose" align="right">
 
 [![Stories in Ready](https://badge.waffle.io/simplyianm/restifier.png?label=ready&title=Ready)](https://waffle.io/simplyianm/restifier)
 [![build status](https://secure.travis-ci.org/simplyianm/restifier.png)](http://travis-ci.org/simplyianm/restifier)
