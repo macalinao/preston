@@ -90,7 +90,10 @@ Next, serve the API as middleware:
 app.use('/api', restifier.middleware());
 ```
 
-This will create a middleware that will be used by Express. In the case of namespace collision, routes are handled sequentially by Express. Declare your custom routes
+This will create a middleware that will be used by Express.
+
+### Namespace Collision
+In the case of namespace collision, routes are handled sequentially by Express. Declare your custom routes
 before using the middleware. For example:
 
 ```
