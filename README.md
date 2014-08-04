@@ -12,6 +12,7 @@ Serves Mongoose models on an extensible RESTful API.
   * Middleware supported on each route, so integration with things like Passport is very simple
 * **[Flexible query filtering system.](#filters)**
 * **[Document transformer system.](#transformers)** Control what gets sent to which clients.
+* **Test coverage.** While probably not at 100%, it is pretty well covered.
 
 ## Installation
 This module is installed via npm:
@@ -26,13 +27,37 @@ The following example serves the `User` and `Page` models on a RESTful API.
 ```js
 var express = require('express');
 var restifier = require('restifier');
-var models = require('./models'); // Your mongoose models would be loaded here
 
 var app = express();
 
 app.use(require('body-parser').json()); // Required
 
-restifier(mongoose.model('User'), mongoose.model('Page')); // Add models
+var User = restifier(mongoose.model('User', new mongoose.Schema({
+  name: {
+    type: String,
+    id: true, // The id used in the route
+    unique: true
+  },
+  password: {
+    type: String,
+    restricted: true // Don't display this field to anyone!
+  }
+})));
+
+// A nested route
+var Badge = User.submodel('badges', 'owner', mongoose.model('Badge', new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  id: {
+    type: Number,
+    id: true,
+    unique: true
+  },
+  content: String
+})));
+
 app.use('/api', restifier.middleware()); // Serve the api on /api.
 
 app.listen(3000);
