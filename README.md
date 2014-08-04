@@ -3,16 +3,15 @@ Serves Mongoose models on an extensible RESTful API.
 [![Stories in Ready](https://badge.waffle.io/simplyianm/restifier.png?label=ready&title=Ready)](https://waffle.io/simplyianm/restifier)
 [![build status](https://secure.travis-ci.org/simplyianm/restifier.png)](http://travis-ci.org/simplyianm/restifier)
 
-<img src="http://m2.i.pbase.com/u26/chonchat/upload/31626102.IMG_6580.jpg" width="300" alt="A RESTing Mongoose" align="right">
-
 ### Features at a Glance
-* **Tight integration with Mongoose and Express.** - You don't need to rewrite your app to use this system.
-  * The API is served as an Express middleware. You can put it on its own route, for example `/api/v1`, and it won't mess up your code.
-  * It uses Mongoose schema parameters to determine many things about the document. Little configuration is required.
-* Query/Create/Get/Update/Destroy - Nothing extra needed on the developer's part
+* **Tight integration with Mongoose and Express.**
+  * An Express middleware. Put it on its own route and the rest of your code is left untouched.
+  * Configured within the Mongoose schema. No need to deal with messy configuration objects.
+* **Query/Create/Get/Update/Destroy**
+  * Everything you'd ever need from a REST API (other than auth) is already included.
   * Middleware supported on each route, so integration with things like Passport is very simple
-* Modular filters (much like Angular) to allow fine-tuned control over the data despite writing very little code
-* Document transformer system to control what data gets sent to which users
+* **[Flexible query filtering system.](#filters)**
+* **[Document transformer system.](#transformers)** Control what gets sent to which clients.
 
 ## Installation
 This module is installed via npm:
