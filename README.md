@@ -195,5 +195,14 @@ model.transformPopulate('owners', function(req, doc) {
 });
 ```
 
+## AngularJS Integration
+This software was built with [Angular](https://angularjs.org/) in mind. Use the module [Restangular](https://github.com/mgonto/restangular) to deal with the generated API
+in a very intuitive manner.
+
+## Example Apps
+Here are some apps that use Restifier. If you have one you'd like to share, please don't be afraid to send a PR!
+
+* [todo-restifier](https://github.com/simplyianm/todo-restifier) - A Restifier-powered Todo app made with Angular, Restangular, Bootstrap, and Restifier.
+
 ## License
 Copyright (c) 2014 Ian Macalinao. Released under the MIT License, which can be viewed in the attached `LICENSE` file.
