@@ -13,6 +13,7 @@ Serves Mongoose models on an extensible RESTful API.
   * Middleware supported on each route, so integration with things like Passport is very simple
 * **[Flexible query filtering system.](#filters)**
 * **[Document transformer system.](#transformers)** Control what gets sent to which clients.
+* **[Built with Angular in mind.](#angularjs-integration)**
 * **Test coverage.** While probably not at 100%, it is pretty well covered.
 
 ## Installation
