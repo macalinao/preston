@@ -169,6 +169,7 @@ model.use('get', function(req, res, next) {
   if (req.user._id !== req.doc.owner) {
     res.status(403).send('Unauthorized!');
   }
+  return next();
 });
 ```
 
