@@ -94,10 +94,27 @@
 
 
     <section class="readme-section">
-        <article><h1>restifier</h1>
+        <article><h1>Restifier</h1>
 <p>Serves Mongoose models on an extensible RESTful API.</p>
 <p><a href="https://waffle.io/simplyianm/restifier"><img src="https://badge.waffle.io/simplyianm/restifier.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
 <a href="http://travis-ci.org/simplyianm/restifier"><img src="https://secure.travis-ci.org/simplyianm/restifier.png" alt="build status"></a></p>
+<h3>Features at a Glance</h3>
+<ul>
+<li><strong>Tight integration with Mongoose and Express.</strong><ul>
+<li>An Express middleware. Put it on its own route and the rest of your code is left untouched.</li>
+<li>Configured within the Mongoose schema. No need to deal with messy configuration objects.</li>
+</ul>
+</li>
+<li><strong>Query/Create/Get/Update/Destroy</strong><ul>
+<li>Everything you'd ever need from a REST API (other than auth) is already included.</li>
+<li>Middleware supported on each route, so integration with things like Passport is very simple</li>
+</ul>
+</li>
+<li><strong><a href="#filters">Flexible query filtering system.</a></strong></li>
+<li><strong><a href="#transformers">Document transformer system.</a></strong> Control what gets sent to which clients.</li>
+<li><strong><a href="#angularjs-integration">Built with Angular in mind.</a></strong></li>
+<li><strong>Test coverage.</strong> While probably not at 100%, it is pretty well covered.</li>
+</ul>
 <h2>Installation</h2>
 <p>This module is installed via npm:</p>
 <pre><code class="lang-bash">$ npm install restifier --save</code></pre>
@@ -105,13 +122,37 @@
 <p>The following example serves the <code>User</code> and <code>Page</code> models on a RESTful API.</p>
 <pre><code class="lang-js">var express = require('express');
 var restifier = require('restifier');
-var models = require('./models'); // Your mongoose models would be loaded here
 
 var app = express();
 
 app.use(require('body-parser').json()); // Required
 
-restifier(mongoose.model('User'), mongoose.model('Page')); // Add models
+var User = restifier(mongoose.model('User', new mongoose.Schema({
+  name: {
+    type: String,
+    id: true, // The id used in the route
+    unique: true
+  },
+  password: {
+    type: String,
+    restricted: true // Don't display this field to anyone!
+  }
+})));
+
+// A nested route
+var Badge = User.submodel('badges', 'owner', mongoose.model('Badge', new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  id: {
+    type: Number,
+    id: true,
+    unique: true
+  },
+  content: String
+})));
+
 app.use('/api', restifier.middleware()); // Serve the api on /api.
 
 app.listen(3000);</code></pre>
@@ -160,6 +201,30 @@ before using the middleware. For example:</p>
 <pre><code>app.post('/api/login', myLoginHandler);
 app.use('/api', restifier.middleware());</code></pre>
 <p>is the appropriate way to add functionality to your API.</p>
+<h3>Route middleware</h3>
+<p>There are 5 types of routes: query, create, get, update, and destroy. You can apply middleware to a single one of these routes by doing the following:</p>
+<pre><code class="lang-js">model.use('get', function(req, res, next) {
+  console.log('Get middleware on model ' + model.model.modelName + ' called!');
+});</code></pre>
+<p>You can also apply middleware to all of a model's routes:</p>
+<pre><code class="lang-js">model.use('all', function(req, res, next) {
+  console.log('Middleware on model ' + model.model.modelName + ' called!');
+});</code></pre>
+<p>The following fields are exposed in the request object:
+<em> <code>doc</code> -- The document being retrieved, or null if not operating on a document route
+</em> <code>parentDoc</code> -- The parent document being retrieved. Used for nested routes.
+* <code>req.query</code> - The <code>populate</code> and <code>sort</code> fields are parsed beforehand, <code>populate</code> being an Array of Strings and <code>sort</code> being an object.</p>
+<h4>Authentication middleware example with Passport</h4>
+<p>Here is an example of using <a href="http://passportjs.org/">Passport</a> to restrict access to a document:</p>
+<pre><code class="lang-js">model.use('get', function(req, res, next) {
+  if (req.user._id !== req.doc.owner) {
+    res.status(403).send('Unauthorized!');
+  }
+  return next();
+});</code></pre>
+<p>Passport exposes a <code>user</code> property on the request, so we can deal with that directly in our middleware. If we were to use something like <a href="https://github.com/ForbesLindesay/connect-roles">connect-roles</a>, we would do something like this:</p>
+<pre><code class="lang-js">model.use('all', user.can('operate on the model'));</code></pre>
+<p>As you can see, it is very easy to apply middleware to individual actions within Restifier.</p>
 <h2>The Query Pipeline</h2>
 <p>Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.</p>
 <pre><code>Modifiers --&gt; Parameters --&gt; Filters --&gt; Population --&gt; Execution --&gt; Transformers</code></pre>
@@ -211,6 +276,14 @@ app.use('/api', restifier.middleware());</code></pre>
   delete doc._id;
   delete doc.password;
 });</code></pre>
+<h2>AngularJS Integration</h2>
+<p>This software was built with <a href="https://angularjs.org/">Angular</a> in mind. Use the module <a href="https://github.com/mgonto/restangular">Restangular</a> to deal with the generated API
+in a very intuitive manner.</p>
+<h2>Example Apps</h2>
+<p>Here are some apps that use Restifier. If you have one you'd like to share, please don't be afraid to send a PR!</p>
+<ul>
+<li><a href="https://github.com/simplyianm/todo-restifier">todo-restifier</a> - A Restifier-powered Todo app made with Angular, Restangular, Bootstrap, and Restifier.</li>
+</ul>
 <h2>License</h2>
 <p>Copyright (c) 2014 Ian Macalinao. Released under the MIT License, which can be viewed in the attached <code>LICENSE</code> file.</p></article>
     </section>
@@ -234,7 +307,7 @@ app.use('/api', restifier.middleware());</code></pre>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Mon Aug 4th 2014 using the <a
+		on Tue Aug 5th 2014 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
