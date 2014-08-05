@@ -24,7 +24,11 @@ module.exports = function setup(done) {
     contacts: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Contact'
-    }]
+    }],
+    profile: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contact'
+    }
   }));
   var Comment = conn.model('Comment', new mongoose.Schema({
     author: {
@@ -111,6 +115,14 @@ module.exports = function setup(done) {
           user.contacts.push(ct);
           ct.save(next3);
         }, proceed);
+      },
+      function(proceed) {
+        var prof = new Contact({
+          name: user.name,
+          enable: true
+        });
+        user.profile = prof;
+        prof.save(proceed);
       },
       function(proceed) {
         user.save(proceed);

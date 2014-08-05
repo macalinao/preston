@@ -347,6 +347,18 @@ describe('Model', function() {
           });
       });
 
+      it('should error if the field is not of type ObjectId', function(done) {
+        request(app).get('/users')
+          .query({
+            populate: 'name'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/does not support population/);
+            done();
+          });
+      });
+
       it('should populate a field', function(done) {
         request(app).get('/users')
           .query({
@@ -357,6 +369,19 @@ describe('Model', function() {
             expect(res.body[0].contacts.length).to.equal(4);
             expect(res.body[0].contacts[0].name).to.not.be.null;
             expect(res.body[0].contacts[0].enable).to.not.be.undefined;
+            done();
+          });
+      });
+
+      it('should populate a field that is not an array', function(done) {
+        request(app).get('/users')
+          .query({
+            populate: 'profile'
+          }).end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(200);
+            expect(res.body[0].profile.name).to.equal(res.body[0].name);
+            expect(res.body[0].profile.enable).to.be.true;
             done();
           });
       });
