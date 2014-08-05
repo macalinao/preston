@@ -1,3 +1,8 @@
+0.1.9
+=====
+* Greatly improved documentation
+* Fixed a bug where sending an invalid field to `populate` would crash the server
+
 0.1.8
 =====
 * Add restifier.middleware() method
