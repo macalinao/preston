@@ -156,6 +156,11 @@ model.use('all', function(req, res, next) {
 });
 ```
 
+The following fields are exposed in the request object:
+* `doc` -- The document being retrieved, or null if not operating on a document route
+* `parentDoc` -- The parent document being retrieved. Used for nested routes.
+* `req.query` - The `populate` and `sort` fields are parsed beforehand, `populate` being an Array of Strings and `sort` being an object.
+
 #### Authentication middleware example with Passport
 Here is an example of using [Passport](http://passportjs.org/) to restrict access to a document:
 
