@@ -139,6 +139,42 @@ app.use('/api', restifier.middleware());
 
 is the appropriate way to add functionality to your API.
 
+### Route middleware
+There are 5 types of routes: query, create, get, update, and destroy. You can apply middleware to a single one of these routes by doing the following:
+
+```js
+model.use('get', function(req, res, next) {
+  console.log('Get middleware on model ' + model.model.modelName + ' called!');
+});
+```
+
+You can also apply middleware to all of a model's routes:
+
+```js
+model.use('all', function(req, res, next) {
+  console.log('Middleware on model ' + model.model.modelName + ' called!');
+});
+```
+
+#### Authentication middleware example with Passport
+Here is an example of using [Passport](http://passportjs.org/) to restrict access to a document:
+
+```js
+model.use('get', function(req, res, next) {
+  if (req.user._id !== req.doc.owner) {
+    res.status(403).send('Unauthorized!');
+  }
+});
+```
+
+Passport exposes a `user` property on the request, so we can deal with that directly in our middleware. If we were to use something like [connect-roles](https://github.com/ForbesLindesay/connect-roles), we would do something like this:
+
+```js
+model.use('all', user.can('operate on the model'));
+```
+
+As you can see, it is very easy to apply middleware to individual actions within Restifier.
+
 ## The Query Pipeline
 Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.
 
