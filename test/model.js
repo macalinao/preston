@@ -62,5 +62,41 @@ describe('Model', function() {
         done();
       });
     });
+
+    it('should synchronously populate-transform a document array', function(done) {
+      User.transformPopulate('friends', function(req, doc) {
+        doc.name = 'Tim';
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            friends: [{}, {}, {}]
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.friends[0].name).to.equal('Tim');
+        done();
+      });
+    });
+
+    it('should asynchronously populate-transform a document array', function(done) {
+      User.transformPopulate('friends', function(req, doc, next) {
+        async.times(1, function() {
+          doc.name = 'Tim';
+          next();
+        });
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            friends: [{}, {}, {}]
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.friends[0].name).to.equal('Tim');
+        done();
+      });
+    });
+
   });
 });
