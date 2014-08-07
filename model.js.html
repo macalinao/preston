@@ -50,6 +50,14 @@
 						</li>
 						
 						<li>
+							<a href="global.html#default">default</a>
+						</li>
+						
+						<li>
+							<a href="global.html#query">query</a>
+						</li>
+						
+						<li>
 							<a href="global.html#restifier">restifier</a>
 						</li>
 						
@@ -77,6 +85,8 @@
 		<pre
 			class="sunlight-highlight-javascript linenums">'use strict';
 
+var _ = require('lodash');
+var async = require('async');
 var express = require('express');
 var queryHelper = require('./query');
 var routes = require('./routes');
@@ -120,7 +130,7 @@ function Model(restifier, model) {
 
   // Remove restricted
   this.transform(function(req, doc) {
-    restricted.filter(function(path) {
+    _.forEach(restricted, function(path) {
       delete doc[path];
     });
   });
@@ -134,7 +144,7 @@ function Model(restifier, model) {
 /**
  * Modifies a query parameter. Modifiers alter the query parameters that will
  * be passed to the pipeline. Modifiers are applied before any logic is called.
- * To modify a parameter, pass the name of the parameter you wish to modify and 
+ * To modify a parameter, pass the name of the parameter you wish to modify and
  * a callback that returns the modified value of the parameter.
  *
  * @example
@@ -268,14 +278,22 @@ Model.prototype.transformPopulate = function(field, fn) {
  *
  * @param {Request} req - The request.
  * @param {Document} doc - The document to apply the transforms to.
+ * @param {Function} [cb] - The cb(err, result) where result is the transformed document.
  * @returns {Object} The transformed document as a JavaScript object.
  */
-Model.prototype.applyTransforms = function(req, doc) {
-  var jsoned = doc.toObject();
-  this.transformers.filter(function(tf) {
-    tf(req, jsoned);
+Model.prototype.applyTransforms = function(req, doc, cb) {
+  async.reduce(this.transformers, doc.toObject(), function(memo, tf, next) {
+    if (tf.length === 2) {
+      tf(req, memo);
+      next(null, memo);
+    } else {
+      tf(req, memo, function(err) {
+        return next(err, memo);
+      });
+    }
+  }, function(err, result) {
+    cb(err, result);
   });
-  return jsoned;
 };
 
 /**
@@ -344,13 +362,15 @@ Model.prototype.serve = function(router) {
 
   router.route(uriBase)
     .get(routeMiddleware.query, routes.query(this))
-    .post(routeMiddleware.create, routes.create(this));
+    .post(routeMiddleware.create, routes.create(this))
+    .all(routes.default);
 
   router.route(uriDoc)
     .get(routeMiddleware.get, routes.get(this))
     .put(routeMiddleware.update, routes.update(this))
     .patch(routeMiddleware.update, routes.update(this))
-    .delete(routeMiddleware.destroy, routes.destroy(this));
+    .delete(routeMiddleware.destroy, routes.destroy(this))
+    .all(routes.default);
 
   return this;
 };

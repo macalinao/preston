@@ -50,6 +50,14 @@
 						</li>
 						
 						<li>
+							<a href="global.html#default">default</a>
+						</li>
+						
+						<li>
+							<a href="global.html#query">query</a>
+						</li>
+						
+						<li>
 							<a href="global.html#restifier">restifier</a>
 						</li>
 						
@@ -205,7 +213,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-19">line 19</a>
+				 <a href="model.js.html#sunlight-1-line-21">line 21</a>
 			</li>
 		</ul>
 	</dd>
@@ -260,7 +268,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="applyTransforms"><span class="type-signature"></span>applyTransforms<span class="signature">(req, doc)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="applyTransforms"><span class="type-signature"></span>applyTransforms<span class="signature">(req, doc, <span class="optional">cb</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
 </dt>
@@ -290,6 +298,8 @@
 		<th>Type</th>
 
 		
+		<th>Argument</th>
+		
 
 		
 
@@ -315,6 +325,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -338,10 +356,51 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>The document to apply the transforms to.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The cb(err, result) where result is the transformed document.</p></td>
         </tr>
 
 	
@@ -378,7 +437,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-196">line 196</a>
+				 <a href="model.js.html#sunlight-1-line-199">line 199</a>
 			</li>
 		</ul>
 	</dd>
@@ -555,7 +614,7 @@ take parameters, allowing immense flexibility for developers to add features to 
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-132">line 132</a>
+				 <a href="model.js.html#sunlight-1-line-134">line 134</a>
 			</li>
 		</ul>
 	</dd>
@@ -695,7 +754,7 @@ the limit parameter to be no greater than what is given here.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-97">line 97</a>
+				 <a href="model.js.html#sunlight-1-line-99">line 99</a>
 			</li>
 		</ul>
 	</dd>
@@ -805,7 +864,7 @@ as that function provides the necessary error handling and invalid method middle
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-287">line 287</a>
+				 <a href="model.js.html#sunlight-1-line-299">line 299</a>
 			</li>
 		</ul>
 	</dd>
@@ -868,7 +927,7 @@ as that function provides the necessary error handling and invalid method middle
     <div class="description">
         <p>Modifies a query parameter. Modifiers alter the query parameters that will
 be passed to the pipeline. Modifiers are applied before any logic is called.
-To modify a parameter, pass the name of the parameter you wish to modify and 
+To modify a parameter, pass the name of the parameter you wish to modify and
 a callback that returns the modified value of the parameter.</p>
     </div>
     
@@ -980,7 +1039,7 @@ a callback that returns the modified value of the parameter.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-75">line 75</a>
+				 <a href="model.js.html#sunlight-1-line-77">line 77</a>
 			</li>
 		</ul>
 	</dd>
@@ -1139,7 +1198,7 @@ Don't use this method; use the middleware instead via <a href="RestAPI.html#midd
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-250">line 250</a>
+				 <a href="model.js.html#sunlight-1-line-260">line 260</a>
 			</li>
 		</ul>
 	</dd>
@@ -1320,7 +1379,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-230">line 230</a>
+				 <a href="model.js.html#sunlight-1-line-240">line 240</a>
 			</li>
 		</ul>
 	</dd>
@@ -1469,7 +1528,7 @@ One transformer is built in, the restricted transformer, and cannot be changed.<
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-151">line 151</a>
+				 <a href="model.js.html#sunlight-1-line-153">line 153</a>
 			</li>
 		</ul>
 	</dd>
@@ -1642,7 +1701,7 @@ your application more secure by removing fields you don't want people to see.</p
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-170">line 170</a>
+				 <a href="model.js.html#sunlight-1-line-172">line 172</a>
 			</li>
 		</ul>
 	</dd>
@@ -1800,7 +1859,7 @@ to this model.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-212">line 212</a>
+				 <a href="model.js.html#sunlight-1-line-222">line 222</a>
 			</li>
 		</ul>
 	</dd>

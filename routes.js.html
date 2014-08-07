@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Restifier Source: index.js</title>
+	<title>Restifier Source: routes.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -78,168 +78,130 @@
 					
 
 
-		<h1 class="page-title">Source: index.js</h1>
+		<h1 class="page-title">Source: routes.js</h1>
     
 <section>
 	<article>
 		<pre
 			class="sunlight-highlight-javascript linenums">'use strict';
 
-var express = require('express');
-var _ = require('lodash');
-var Model = require('./model');
+var async = require('async');
+var queryHelper = require('./query');
+var utils = require('./utils');
 
-var init = function() {
-  var api = new RestAPI();
+/**
+ * The query route.
+ *
+ * @param {Model} model - The {@link Model}.
+ * @returns {Function} A middleware corresponding to this route.
+ */
+exports.query = function(model) {
+  var Mod = model.model;
+  return function(req, res) {
+    var query = Mod.find();
+    var reqQuery = req.query;
 
-  /**
-   * The main function. Wraps {@link RestAPI#setup}.
-   *
-   * @global
-   * @see RestAPI#setup
-   */
-  var restifier = module.exports = function() {
-    return api.setup.apply(api, Array.prototype.slice.call(arguments, 0));
-  };
+    if (req.parentDoc) {
+      query.where(model.parentCorrespondsTo).equals(req.parentDoc);
+    }
 
-  /**
-   * Factory function to create a new {@link RestAPI}.
-   *
-   * @name restifier.api
-   * @global
-   * @see RestAPI
-   *
-   * @returns RestAPI A new RestAPI.
-   */
-  restifier.api = function() {
-    return new RestAPI();
-  };
+    queryHelper.applyModifiers(model, req);
 
-  /**
-   * Resets the restifier API. You should not use this.
-   *
-   * @api private
-   */
-  restifier.reset = init;
-
-  // Bind all RestAPI functions to the restifier object
-  _.forEach(RestAPI.prototype, function(method, name) {
-    if (typeof method !== 'function') {
+    try {
+      queryHelper.applyQueryFields(req, query, model, res);
+      if (reqQuery.populate) {
+        queryHelper.applyPopulate(query, model, reqQuery.populate, res);
+      }
+    } catch (err) {
+      if (!err.code) {
+        throw err;
+      }
       return;
     }
-    restifier[name] = _.bind(method, api);
-  });
+
+    query.exec(function(err, docs) {
+      if (err) {
+        throw err;
+      }
+      async.map(docs, function(doc, next) {
+        model.applyTransforms(req, doc, next);
+      }, function(e, jsoned) {
+        res.json(jsoned);
+      });
+    });
+  };
 };
 
-/**
- * Represents a RESTful API powered by Restifier.
- *
- * @class
- */
-function RestAPI() {
-  this.models = {};
-}
-
-/**
- * Gateway function that can add model(s) or return initialization
- * middleware depending on the arguments passed to it.
- *
- * @returns {Model|Function} A model or middleware depending on the arguments.
- * * `setup()` - Returns `initialize()`
- * * `setup(mong)` - Returns `model(mong)`
- * * `setup(mong1, mong2)` - Returns `modelsMiddleware(mong1, mong2)`
- */
-RestAPI.prototype.setup = function() {
-  var args = Array.prototype.slice.call(arguments, 0);
-  if (args.length > 1) {
-    return this.modelsMiddleware(args);
-  }
-
-  if (args.length === 0 || !args[0].schema) {
-    return this.initialize();
-  }
-  return this.model(args[0]);
+exports.create = function(model) {
+  var Mod = model.model;
+  return function(req, res) {
+    var doc = new Mod(req.body);
+    if (req.parentDoc) {
+      doc[model.parentCorrespondsTo] = req.parentDoc;
+    }
+    doc.save(function(err) {
+      if (err) {
+        if (err.err && err.err.match(/duplicate key error/)) {
+          return res.error(409, Mod.modelName + ' already exists.');
+        }
+        return res.error(500, err.message);
+      }
+      model.applyTransforms(req, doc, function(err, jsoned) {
+        res.json(jsoned);
+      });
+    });
+  };
 };
 
-/**
- * Initialization middleware.
- *
- * @returns {Function} Express middleware
- */
-RestAPI.prototype.initialize = function() {
-  return require('res-error')({
-    log: false
-  });
+exports.get = function(model) {
+  return function(req, res) {
+    model.applyTransforms(req, req.doc, function(err, jsoned) {
+      res.json(jsoned);
+    });
+  };
 };
 
-/**
- * Should be called after the app has been created.
- *
- * @returns {Function} Express middleware
- */
-RestAPI.prototype.finish = function() {
-  return function(req, res, next) {
-    return res.error(404, 'Path not found.');
+exports.update = function(model) {
+  return function(req, res) {
+    var doc = req.doc;
+    var body = req.body;
+    for (var prop in body) {
+      if (!body.hasOwnProperty(prop)) {
+        continue;
+      }
+      doc[prop] = body[prop];
+    }
+
+    doc.save(function(err) {
+      if (err) {
+        return res.error(500, err);
+      }
+      model.applyTransforms(req, doc, function(err, jsoned) {
+        res.json(jsoned);
+      });
+    });
+  };
+};
+
+exports.destroy = function(model) {
+  return function(req, res) {
+    req.doc.remove(function(err) {
+      if (err) {
+        return res.error(500, err);
+      }
+      return res.json({
+        success: true
+      });
+    });
   };
 };
 
 /**
- * Adds a model to this RestAPI.
- *
- * @param {mongoose.Model} mong The mongoose model
+ * The default route that will be called if nothing else is.
  */
-RestAPI.prototype.model = function(mong) {
-  var m = new Model(this, mong);
-  this.models[mong.modelName] = m;
-  return m;
+exports.default = function(req, res, next) {
+  return res.error(405, req.method + ' not allowed on path ' + req.path + '.');
 };
-
-/**
- * Adds multiple models to this RestAPI.
- *
- * @param {mongoose.Model[]} mongs The mongoose models
- */
-RestAPI.prototype.addModels = function(mongs) {
-  return _.map(mongs, function(mong) {
-    return this.model(mong);
-  }, this);
-};
-
-/**
- * Creates a middleware out of multiple models.
- *
- * @param {mongoose.Model[]} mongs The mongoose models
- */
-RestAPI.prototype.modelsMiddleware = function(mongs) {
-  var router = express.Router();
-  _.forEach(this.addModels(mongs), function(model) {
-    model.serve(router);
-  });
-  return router;
-};
-
-/**
- * Creates middleware that encompasses all registered models.
- * This is equivalent to calling `model.middleware()` for each
- * individual model, plus calling `restifier.initialize()` and
- * `restifier.finish()`.
- *
- * @returns {Router} Returns an Express router containing all middlewares.
- */
-RestAPI.prototype.middleware = function() {
-  var router = express.Router();
-  router.use(this.initialize());
-  _.forEach(this.models, function(model) {
-    router.use(model.middleware());
-    _.forEach(model.submodels, function(submodel) {
-      router.use(submodel.middleware());
-    });
-  });
-  router.use(this.finish());
-  return router;
-};
-
-init();
 </pre>
 	</article>
 </section>
