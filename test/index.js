@@ -74,9 +74,8 @@ describe('restifier', function() {
 
   describe('405', function() {
     beforeEach(function() {
-      app.use(restifier());
-      app.use(restifier(User, Post));
-      app.use(restifier.finish());
+      restifier(User, Post);
+      app.use(restifier.middleware());
     });
 
     it('should not allow PUT collection', function(done) {
@@ -111,6 +110,31 @@ describe('restifier', function() {
         expect(err).to.be.null;
         expect(res.status).to.equal(405);
         expect(res.body.message).to.match(/POST/);
+        done();
+      });
+    });
+  });
+
+  describe('404', function(done) {
+    beforeEach(function() {
+      restifier(User, Post);
+      app.use(restifier.middleware());
+    });
+
+    it('should 404 if model is invalid', function(done) {
+      request(app).get('/dnes').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(404);
+        expect(res.body.message).to.match(/Path not found/);
+        done();
+      });
+    });
+
+    it('should 404 if submodel is invalid', function(done) {
+      request(app).get('/dnes/1/asdf').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(404);
+        expect(res.body.message).to.match(/Path not found/);
         done();
       });
     });
