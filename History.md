@@ -1,3 +1,10 @@
+0.1.10
+=====
+* Added async calling of query pipeline elements
+* Improved documentation even more
+* Changed 405 to only be returned on existing models, else 404
+* Modified code to use lodash
+
 0.1.9
 =====
 * Greatly improved documentation

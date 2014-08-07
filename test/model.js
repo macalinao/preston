@@ -1,5 +1,6 @@
 'use strict';
 
+var async = require('async');
 var expect = require('chai').expect;
 var express = require('express');
 var http = require('http');
@@ -28,5 +29,38 @@ describe('Model', function() {
 
   it('should detect restricted fields in a schema', function() {
     expect(User.restricted).to.eql(['password']);
+  });
+
+  describe('transforms', function() {
+    it('should synchronously transform the document', function(done) {
+      User.transform(function(req, doc) {
+        doc.asdf = 'asdf';
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {};
+        }
+      }, function(err, doc) {
+        expect(doc.asdf).to.equal('asdf');
+        done();
+      });
+    });
+
+    it('should asynchronously transform the document', function(done) {
+      User.transform(function(req, doc, next) {
+        async.times(1, function() {
+          doc.asdf = 'asdf';
+          next();
+        });
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {};
+        }
+      }, function(err, doc) {
+        expect(doc.asdf).to.equal('asdf');
+        done();
+      });
+    });
   });
 });
