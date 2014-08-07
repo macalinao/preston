@@ -87,9 +87,11 @@ module.exports = Model;
 /**
  * Constructor.
  *
+ * @see RestAPI#model
+ *
  * @class
- * @param {RestAPI} restifier The RestAPI instance
- * @param {mongoose.Model} model The mongoose model that is being restified.
+ * @param {RestAPI} restifier - The RestAPI instance
+ * @param {mongoose.Model} model - The mongoose model that is being restified.
  */
 function Model(restifier, model) {
   var thiz = this;
@@ -130,23 +132,44 @@ function Model(restifier, model) {
 }
 
 /**
- * Modifies a query parameter.
+ * Modifies a query parameter. Modifiers alter the query parameters that will
+ * be passed to the pipeline. Modifiers are applied before any logic is called.
+ * To modify a parameter, pass the name of the parameter you wish to modify and 
+ * a callback that returns the modified value of the parameter.
  *
- * @param param - The param to modify
- * @param fn(req, value) - The modifier function. Should return the new value.
+ * @example
+ * // A modifier that forces sorting by name ascending
+ * model.modifyParam('sort', function(req, value) {
+ *   value.name = 1;
+ *   return value;
+ * });
+ *
+ * @param {String} param - The param to modify. Can be limit, skip, populate, sort,
+ *   any document field, or a parameter handled by a custom middleware.
+ * @param {Function} modifier - The modifier(req, value) function. Should return the new value.
+ * @returns {Model} The instance of this model
  */
-Model.prototype.modifyParam = function(param, fn) {
+Model.prototype.modifyParam = function(param, modifier) {
   this.modifiers.push({
     param: param,
-    fn: fn
+    fn: modifier
   });
   return this;
 };
 
 /**
- * Modifies the limit parameter.
+ * Modifies the limit parameter. Internally, this applies a {@link modifyParam} that restricts
+ * the limit parameter to be no greater than what is given here.
  *
- * @param num - The maximum number of documents that can be returned.
+ * @example
+ * model.limit(5); // Now only 5 documents can be returned max
+ *
+ * // GET /model?limit=4 - Returns 4 documents
+ * // GET /model?limit=5 - Returns 5 documents
+ * // GET /model?limit=6 - Returns 5 documents
+ *
+ * @param {Number} num - The maximum number of documents that can be returned.
+ * @returns {Model} The instance of this model
  */
 Model.prototype.limit = function(num) {
   return this.modifyParam('limit', function(req, value) {
@@ -155,10 +178,33 @@ Model.prototype.limit = function(num) {
 };
 
 /**
- * Adds a filter to this model.
+ * Adds a filter to this model. Filters are user-defined functions that modify the
+ * query. They work very similarly to AngularJS filters. They can be chained and
+ * take parameters, allowing immense flexibility for developers to add features to APIs.
  *
- * @param name - The name of the filter.
- * @param filter(req, query, params...) - The filter function that will be run on queries.
+ * Filters are called like this:
+ * ```
+ * GET /people?filter=children
+ * ```
+ *
+ * They can also be chained like this:
+ * ```
+ * GET /people?filter=children | proximity 5
+ * ```
+ *
+ * @example
+ * // A simple filter
+ * model.filter('children', function(req, query) {
+ *   query.where('age').lt(18);
+ * });
+ *
+ * // A filter that takes parameters:
+ * model.filter('proximity', function(req, query, distance) {
+ *   query.where('location').maxDistance(distance);
+ * });
+ *
+ * @param {String} name - The name of the filter (case sensitive).
+ * @param {Function} filter - The filter function (req, query, params...) that will be applied to queries.
  */
 Model.prototype.filter = function(name, filter) {
   this.filters[name] = filter;
@@ -166,16 +212,34 @@ Model.prototype.filter = function(name, filter) {
 };
 
 /**
- * Adds a transformer to this model.
+ * Adds a transformer to this model. Transformers change the returned results.
+ * One transformer is built in, the restricted transformer, and cannot be changed.
  *
- * @param transformer(req, doc) - The transformer
+ * @example
+ * model.transform(function(req, doc) {
+ *   delete doc._id;
+ *   delete doc.password;
+ *   doc.type = 'This is a string that isn\'t in the database!';
+ * });
+ *
+ * @param {Function} transformer - The transformer(req, doc).
+ * @returns {Model} The instance of this model
  */
 Model.prototype.transform = function(transformer) {
   this.transformers.push(transformer);
+  return this;
 };
 
 /**
- * Adds a population transformer
+ * Adds a population transformer to this model. Population transformers are
+ * transformers that operate on populated fields. They can be used to make
+ * your application more secure by removing fields you don't want people to see.
+ *
+ * @example
+ * model.transformPopulate('owners', function(req, doc) {
+ *   delete doc._id;
+ *   delete doc.password;
+ * });
  *
  * @param field - The populated field to transform.
  * @param fn(req, doc) - The transform function
@@ -199,6 +263,13 @@ Model.prototype.transformPopulate = function(field, fn) {
   });
 };
 
+/**
+ * Applies all of the transforms defined on this model on a document.
+ *
+ * @param {Request} req - The request.
+ * @param {Document} doc - The document to apply the transforms to.
+ * @returns {Object} The transformed document as a JavaScript object.
+ */
 Model.prototype.applyTransforms = function(req, doc) {
   var jsoned = doc.toObject();
   this.transformers.filter(function(tf) {
@@ -208,10 +279,12 @@ Model.prototype.applyTransforms = function(req, doc) {
 };
 
 /**
- * Uses a middleware on a certain route.
+ * Uses a middleware on a certain route. These middlewares are called in the order that they are added
+ * to this model.
  *
- * @param route - The route. Can be one of all, query, create, get, update, destroy.
- * @param middleware(req, res, next) - The middleware.
+ * @param {String} route - The route. Can be one of all, query, create, get, update, destroy.
+ * @param {Function} middleware - The middleware(req, res, next).
+ * @returns {Model} The instance of this model
  */
 Model.prototype.use = function(route, middleware) {
   route = route.toLowerCase();
@@ -224,9 +297,12 @@ Model.prototype.use = function(route, middleware) {
  * Makes a field a submodel, meaning that field
  * has its own routes for query/crud.
  *
+ * Note that you cannot create a submodel of a submodel.
+ *
  * @param field - The field to submodel
  * @param correspondsTo - The submodel's field that corresponds to this model.
  * @param model - The mongoose model
+ * @returns {Model} A model which is prefixed with this model's route.
  */
 Model.prototype.submodel = function(field, correspondsTo, model) {
   // Check if valid
@@ -243,9 +319,10 @@ Model.prototype.submodel = function(field, correspondsTo, model) {
 
 /**
  * Serves this model on a RESTful API.
- * Don't use this method; use the middleware instead.
+ * Don't use this method; use the middleware instead via {@link RestAPI#middleware}.
  *
- * @param router - The Express router to serve the model on.
+ * @param {express.Router} router - The Express router to serve the model on.
+ * @returns {Model} The instance of this model
  */
 Model.prototype.serve = function(router) {
   var thiz = this;
@@ -279,7 +356,10 @@ Model.prototype.serve = function(router) {
 };
 
 /**
- * Creates a middleware of this model.
+ * Creates a middleware of this model. It is preferable to use {@link RestAPI#middleware}
+ * as that function provides the necessary error handling and invalid method middlewares.
+ *
+ * @returns {Middleware} The middleware corresponding to this model.
  */
 Model.prototype.middleware = function() {
   var router = express.Router();
@@ -307,7 +387,7 @@ Model.prototype.middleware = function() {
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Tue Aug 5th 2014 using the <a
+		on Thu Aug 7th 2014 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>

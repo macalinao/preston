@@ -205,7 +205,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-17">line 17</a>
+				 <a href="model.js.html#sunlight-1-line-19">line 19</a>
 			</li>
 		</ul>
 	</dd>
@@ -213,6 +213,13 @@
 
 	
 
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="RestAPI.html#model">RestAPI#model</a></li>
+			</ul>
+	</dd>
 	
 
 	
@@ -253,7 +260,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="filter"><span class="type-signature"></span>filter<span class="signature">(name, filter(req,)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="applyTransforms"><span class="type-signature"></span>applyTransforms<span class="signature">(req, doc)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
 </dt>
@@ -261,7 +268,184 @@
     
     
     <div class="description">
-        <p>Adds a filter to this model.</p>
+        <p>Applies all of the transforms defined on this model on a document.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The request.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>doc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Document</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document to apply the transforms to.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="model.js.html">model.js</a>,
+				 <a href="model.js.html#sunlight-1-line-196">line 196</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The transformed document as a JavaScript object.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Object</span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="filter"><span class="type-signature"></span>filter<span class="signature">(name, filter)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Adds a filter to this model. Filters are user-defined functions that modify the
+query. They work very similarly to AngularJS filters. They can be chained and
+take parameters, allowing immense flexibility for developers to add features to APIs.</p>
+<p>Filters are called like this:</p>
+<pre><code>GET /people?filter=children</code></pre>
+<p>They can also be chained like this:</p>
+<pre><code>GET /people?filter=children | proximity 5</code></pre>
     </div>
     
 
@@ -300,23 +484,33 @@
 
             <td class="type">
             
+                
+<span class="param-type">String</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last"><p>The name of the filter.</p></td>
+            <td class="description last"><p>The name of the filter (case sensitive).</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>filter(req,</code></td>
+                <td class="name"><code>filter</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -324,7 +518,7 @@
 
             
 
-            <td class="description last"><p>query, params...) - The filter function that will be run on queries.</p></td>
+            <td class="description last"><p>The filter function (req, query, params...) that will be applied to queries.</p></td>
         </tr>
 
 	
@@ -361,7 +555,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-86">line 86</a>
+				 <a href="model.js.html#sunlight-1-line-132">line 132</a>
 			</li>
 		</ul>
 	</dd>
@@ -386,12 +580,26 @@
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">&#x2F;&#x2F; A simple filter
+model.filter(&#x27;children&#x27;, function(req, query) {
+  query.where(&#x27;age&#x27;).lt(18);
+});
+
+&#x2F;&#x2F; A filter that takes parameters:
+model.filter(&#x27;proximity&#x27;, function(req, query, distance) {
+  query.where(&#x27;location&#x27;).maxDistance(distance);
+});</pre>
+
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="limit"><span class="type-signature"></span>limit<span class="signature">(num)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="limit"><span class="type-signature"></span>limit<span class="signature">(num)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -399,7 +607,8 @@
     
     
     <div class="description">
-        <p>Modifies the limit parameter.</p>
+        <p>Modifies the limit parameter. Internally, this applies a modifyParam that restricts
+the limit parameter to be no greater than what is given here.</p>
     </div>
     
 
@@ -437,6 +646,11 @@
             
 
             <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
             
             </td>
 
@@ -481,7 +695,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-74">line 74</a>
+				 <a href="model.js.html#sunlight-1-line-97">line 97</a>
 			</li>
 		</ul>
 	</dd>
@@ -504,14 +718,47 @@
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">model.limit(5); &#x2F;&#x2F; Now only 5 documents can be returned max
+
+&#x2F;&#x2F; GET &#x2F;model?limit=4 - Returns 4 documents
+&#x2F;&#x2F; GET &#x2F;model?limit=5 - Returns 5 documents
+&#x2F;&#x2F; GET &#x2F;model?limit=6 - Returns 5 documents</pre>
+
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="middleware"><span class="type-signature"></span>middleware<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="middleware"><span class="type-signature"></span>middleware<span class="signature">()</span><span class="type-signature"> &rarr; {Middleware}</span></h4>
     
     
 </dt>
@@ -519,7 +766,8 @@
     
     
     <div class="description">
-        <p>Creates a middleware of this model.</p>
+        <p>Creates a middleware of this model. It is preferable to use <a href="RestAPI.html#middleware">RestAPI#middleware</a>
+as that function provides the necessary error handling and invalid method middlewares.</p>
     </div>
     
 
@@ -557,7 +805,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-207">line 207</a>
+				 <a href="model.js.html#sunlight-1-line-287">line 287</a>
 			</li>
 		</ul>
 	</dd>
@@ -580,6 +828,29 @@
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The middleware corresponding to this model.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">Middleware</span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
@@ -587,7 +858,7 @@
         
             
 <dt>
-    <h4 class="name" id="modifyParam"><span class="type-signature"></span>modifyParam<span class="signature">(param, fn(req,)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="modifyParam"><span class="type-signature"></span>modifyParam<span class="signature">(param, modifier)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -595,7 +866,10 @@
     
     
     <div class="description">
-        <p>Modifies a query parameter.</p>
+        <p>Modifies a query parameter. Modifiers alter the query parameters that will
+be passed to the pipeline. Modifiers are applied before any logic is called.
+To modify a parameter, pass the name of the parameter you wish to modify and 
+a callback that returns the modified value of the parameter.</p>
     </div>
     
 
@@ -634,23 +908,34 @@
 
             <td class="type">
             
+                
+<span class="param-type">String</span>
+
+
+            
             </td>
 
             
 
             
 
-            <td class="description last"><p>The param to modify</p></td>
+            <td class="description last"><p>The param to modify. Can be limit, skip, populate, sort,
+  any document field, or a parameter handled by a custom middleware.</p></td>
         </tr>
 
 	
 
         <tr>
             
-                <td class="name"><code>fn(req,</code></td>
+                <td class="name"><code>modifier</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -658,7 +943,7 @@
 
             
 
-            <td class="description last"><p>value) - The modifier function. Should return the new value.</p></td>
+            <td class="description last"><p>The modifier(req, value) function. Should return the new value.</p></td>
         </tr>
 
 	
@@ -695,7 +980,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-61">line 61</a>
+				 <a href="model.js.html#sunlight-1-line-75">line 75</a>
 			</li>
 		</ul>
 	</dd>
@@ -718,14 +1003,47 @@
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">&#x2F;&#x2F; A modifier that forces sorting by name ascending
+model.modifyParam(&#x27;sort&#x27;, function(req, value) {
+  value.name = 1;
+  return value;
+});</pre>
+
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="serve"><span class="type-signature"></span>serve<span class="signature">(router)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="serve"><span class="type-signature"></span>serve<span class="signature">(router)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -734,7 +1052,7 @@
     
     <div class="description">
         <p>Serves this model on a RESTful API.
-Don't use this method; use the middleware instead.</p>
+Don't use this method; use the middleware instead via <a href="RestAPI.html#middleware">RestAPI#middleware</a>.</p>
     </div>
     
 
@@ -772,6 +1090,11 @@ Don't use this method; use the middleware instead.</p>
             
 
             <td class="type">
+            
+                
+<span class="param-type">express.Router</span>
+
+
             
             </td>
 
@@ -816,7 +1139,7 @@ Don't use this method; use the middleware instead.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-173">line 173</a>
+				 <a href="model.js.html#sunlight-1-line-250">line 250</a>
 			</li>
 		</ul>
 	</dd>
@@ -839,6 +1162,29 @@ Don't use this method; use the middleware instead.</p>
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
@@ -846,7 +1192,7 @@ Don't use this method; use the middleware instead.</p>
         
             
 <dt>
-    <h4 class="name" id="submodel"><span class="type-signature"></span>submodel<span class="signature">(field, correspondsTo, model)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="submodel"><span class="type-signature"></span>submodel<span class="signature">(field, correspondsTo, model)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -856,6 +1202,7 @@ Don't use this method; use the middleware instead.</p>
     <div class="description">
         <p>Makes a field a submodel, meaning that field
 has its own routes for query/crud.</p>
+<p>Note that you cannot create a submodel of a submodel.</p>
     </div>
     
 
@@ -973,7 +1320,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-154">line 154</a>
+				 <a href="model.js.html#sunlight-1-line-230">line 230</a>
 			</li>
 		</ul>
 	</dd>
@@ -996,6 +1343,29 @@ has its own routes for query/crud.</p>
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>A model which is prefixed with this model's route.</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
@@ -1003,7 +1373,7 @@ has its own routes for query/crud.</p>
         
             
 <dt>
-    <h4 class="name" id="transform"><span class="type-signature"></span>transform<span class="signature">(transformer(req,)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="transform"><span class="type-signature"></span>transform<span class="signature">(transformer)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -1011,7 +1381,8 @@ has its own routes for query/crud.</p>
     
     
     <div class="description">
-        <p>Adds a transformer to this model.</p>
+        <p>Adds a transformer to this model. Transformers change the returned results.
+One transformer is built in, the restricted transformer, and cannot be changed.</p>
     </div>
     
 
@@ -1045,10 +1416,15 @@ has its own routes for query/crud.</p>
 
         <tr>
             
-                <td class="name"><code>transformer(req,</code></td>
+                <td class="name"><code>transformer</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -1056,7 +1432,7 @@ has its own routes for query/crud.</p>
 
             
 
-            <td class="description last"><p>doc) - The transformer</p></td>
+            <td class="description last"><p>The transformer(req, doc).</p></td>
         </tr>
 
 	
@@ -1093,7 +1469,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-96">line 96</a>
+				 <a href="model.js.html#sunlight-1-line-151">line 151</a>
 			</li>
 		</ul>
 	</dd>
@@ -1116,7 +1492,40 @@ has its own routes for query/crud.</p>
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">model.transform(function(req, doc) {
+  delete doc._id;
+  delete doc.password;
+  doc.type = &#x27;This is a string that isn\&#x27;t in the database!&#x27;;
+});</pre>
+
+
     
 </dd>
 
@@ -1131,7 +1540,9 @@ has its own routes for query/crud.</p>
     
     
     <div class="description">
-        <p>Adds a population transformer</p>
+        <p>Adds a population transformer to this model. Population transformers are
+transformers that operate on populated fields. They can be used to make
+your application more secure by removing fields you don't want people to see.</p>
     </div>
     
 
@@ -1231,7 +1642,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-106">line 106</a>
+				 <a href="model.js.html#sunlight-1-line-170">line 170</a>
 			</li>
 		</ul>
 	</dd>
@@ -1256,12 +1667,21 @@ has its own routes for query/crud.</p>
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">model.transformPopulate(&#x27;owners&#x27;, function(req, doc) {
+  delete doc._id;
+  delete doc.password;
+});</pre>
+
+
+    
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="use"><span class="type-signature"></span>use<span class="signature">(route, middleware(req,)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="use"><span class="type-signature"></span>use<span class="signature">(route, middleware)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -1269,7 +1689,8 @@ has its own routes for query/crud.</p>
     
     
     <div class="description">
-        <p>Uses a middleware on a certain route.</p>
+        <p>Uses a middleware on a certain route. These middlewares are called in the order that they are added
+to this model.</p>
     </div>
     
 
@@ -1308,6 +1729,11 @@ has its own routes for query/crud.</p>
 
             <td class="type">
             
+                
+<span class="param-type">String</span>
+
+
+            
             </td>
 
             
@@ -1321,10 +1747,15 @@ has its own routes for query/crud.</p>
 
         <tr>
             
-                <td class="name"><code>middleware(req,</code></td>
+                <td class="name"><code>middleware</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -1332,7 +1763,7 @@ has its own routes for query/crud.</p>
 
             
 
-            <td class="description last"><p>res, next) - The middleware.</p></td>
+            <td class="description last"><p>The middleware(req, res, next).</p></td>
         </tr>
 
 	
@@ -1369,7 +1800,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-139">line 139</a>
+				 <a href="model.js.html#sunlight-1-line-212">line 212</a>
 			</li>
 		</ul>
 	</dd>
@@ -1392,6 +1823,29 @@ has its own routes for query/crud.</p>
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
 </dd>
@@ -1422,7 +1876,7 @@ has its own routes for query/crud.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Tue Aug 5th 2014 using the <a
+		on Thu Aug 7th 2014 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
