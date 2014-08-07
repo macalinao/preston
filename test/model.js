@@ -385,7 +385,7 @@ describe('Model', function() {
             done();
           });
       });
-      
+
       it('should allow transforming population', function(done) {
         User.transformPopulate('contacts', function(req, doc) {
           delete doc.enable;
@@ -448,6 +448,62 @@ describe('Model', function() {
             expect(err).to.be.null;
             expect(res.status).to.equal(401);
             expect(res.body.message).to.match(/Cannot sort restricted field/);
+            done();
+          });
+      });
+
+      it('should not sort a field that does not exist', function(done) {
+        User.restricted.push('contacts');
+        request(app).get('/users')
+          .query({
+            sort: 'dne'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Field "dne" does not exist/);
+            done();
+          });
+      });
+
+      it('should not sort a field that does not exist but still parse correctly', function(done) {
+        User.restricted.push('contacts');
+        request(app).get('/users')
+          .query({
+            sort: '-dne'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Field "dne" does not exist/);
+            done();
+          });
+      });
+
+      it('should not sort an invalid field that does not exist but still parse correctly', function(done) {
+        User.restricted.push('contacts');
+        request(app).get('/users')
+          .query({
+            sort: '--dne--'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Field "-dne--" does not exist/);
+            done();
+          });
+      });
+
+      it('should not sort a field that is a property of object', function(done) {
+        User.restricted.push('contacts');
+        request(app).get('/users')
+          .query({
+            sort: 'toString'
+          })
+          .end(function(err, res) {
+            expect(err).to.be.null;
+            expect(res.status).to.equal(400);
+            expect(res.body.message).to.match(/Field "toString" does not exist/);
             done();
           });
       });
