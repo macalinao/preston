@@ -179,8 +179,6 @@ Passport exposes a `user` property on the request, so we can deal with that dire
 model.use('all', user.can('operate on the model'));
 ```
 
-As you can see, it is very easy to apply middleware to individual actions within Restifier.
-
 ## The Query Pipeline
 Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.
 
