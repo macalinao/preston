@@ -1,9 +1,10 @@
 0.1.10
 =====
-* Added async calling of query pipeline elements
+* Added async calling of transformers and modifiers
 * Improved documentation even more
 * Changed 405 to only be returned on existing models, else 404
 * Modified code to use lodash
+* Coveralls
 
 0.1.9
 =====
