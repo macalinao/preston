@@ -235,6 +235,20 @@ describe('routes', function() {
         });
     });
 
+    it('should not change a non-existent field', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob')
+        .send({
+          dne: 'Basketball'
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.status).to.equal(200);
+          expect(res.body.dne).to.be.undefined;
+          done();
+        });
+    });
+
     it('should 404 if the document was not found', function(done) {
       User.id = 'name';
       request(app).put('/users/DNE')
