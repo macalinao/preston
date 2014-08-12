@@ -63,6 +63,41 @@ describe('Model', function() {
       });
     });
 
+    it('should synchronously populate-transform a document', function(done) {
+      User.transformPopulate('spouse', function(req, doc) {
+        doc.name = 'Tim';
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            spouse: {}
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.spouse.name).to.equal('Tim');
+        done();
+      });
+    });
+
+    it('should asynchronously populate-transform a document', function(done) {
+      User.transformPopulate('spouse', function(req, doc, next) {
+        async.times(1, function() {
+          doc.name = 'Tim';
+          next();
+        });
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            spouse: {}
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.spouse.name).to.equal('Tim');
+        done();
+      });
+    });
+
     it('should synchronously populate-transform a document array', function(done) {
       User.transformPopulate('friends', function(req, doc) {
         doc.name = 'Tim';
@@ -94,6 +129,20 @@ describe('Model', function() {
         }
       }, function(err, doc) {
         expect(doc.friends[0].name).to.equal('Tim');
+        done();
+      });
+    });
+
+    it('should not transform a non-existent field', function(done) {
+      User.transformPopulate('dne', function(req, doc) {
+        doc.asdf = 'asdf';
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {};
+        }
+      }, function(err, doc) {
+        expect(doc.asdf).to.be.undefined;
         done();
       });
     });
