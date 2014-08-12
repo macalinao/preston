@@ -6,8 +6,8 @@
   "scripts": {
     "pretest": "node_modules/.bin/jshint lib/ test/",
     "test": "node_modules/.bin/mocha -R spec",
-    "test-cover": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && rm -rf ./coverage",
-    "test-coveralls": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test-cover": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec --timeout 15000 && rm -rf ./coverage",
+    "test-travis": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
