@@ -43,6 +43,15 @@ describe('restifier', function() {
     app.use(bodyParser.json());
   });
 
+  describe('api reset', function() {
+    it('should create a brand new api', function() {
+      restifier(User, Post);
+      var models = restifier.instance.models;
+      expect(models).to.eql(restifier.instance.models);
+      expect(models).to.not.eql(restifier.api().models);
+    });
+  });
+
   describe('quick initialize', function() {
     it('should add the appropriate error handlers', function(done) {
       app.use(restifier());
