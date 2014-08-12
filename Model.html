@@ -268,6 +268,131 @@
         <dl>
             
 <dt>
+    <h4 class="name" id="applyModifiers"><span class="type-signature"></span>applyModifiers<span class="signature">(request)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Applies the modifiers of this model onto a request.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name"><code>request</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The request</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="model.js.html">model.js</a>,
+				 <a href="model.js.html#sunlight-1-line-90">line 90</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="applyTransforms"><span class="type-signature"></span>applyTransforms<span class="signature">(req, doc, <span class="optional">cb</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
     
@@ -437,7 +562,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-199">line 199</a>
+				 <a href="model.js.html#sunlight-1-line-279">line 279</a>
 			</li>
 		</ul>
 	</dd>
@@ -614,7 +739,7 @@ take parameters, allowing immense flexibility for developers to add features to 
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-134">line 134</a>
+				 <a href="model.js.html#sunlight-1-line-172">line 172</a>
 			</li>
 		</ul>
 	</dd>
@@ -754,7 +879,7 @@ the limit parameter to be no greater than what is given here.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-99">line 99</a>
+				 <a href="model.js.html#sunlight-1-line-137">line 137</a>
 			</li>
 		</ul>
 	</dd>
@@ -864,7 +989,7 @@ as that function provides the necessary error handling and invalid method middle
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-299">line 299</a>
+				 <a href="model.js.html#sunlight-1-line-379">line 379</a>
 			</li>
 		</ul>
 	</dd>
@@ -1002,7 +1127,7 @@ a callback that returns the modified value of the parameter.</p>
 
             
 
-            <td class="description last"><p>The modifier(req, value) function. Should return the new value.</p></td>
+            <td class="description last"><p>The modifier(req, value[, cb]) function. Should return the new value.</p></td>
         </tr>
 
 	
@@ -1198,7 +1323,7 @@ Don't use this method; use the middleware instead via <a href="RestAPI.html#midd
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-260">line 260</a>
+				 <a href="model.js.html#sunlight-1-line-340">line 340</a>
 			</li>
 		</ul>
 	</dd>
@@ -1379,7 +1504,7 @@ has its own routes for query/crud.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-240">line 240</a>
+				 <a href="model.js.html#sunlight-1-line-320">line 320</a>
 			</li>
 		</ul>
 	</dd>
@@ -1491,7 +1616,7 @@ One transformer is built in, the restricted transformer, and cannot be changed.<
 
             
 
-            <td class="description last"><p>The transformer(req, doc).</p></td>
+            <td class="description last"><p>The transformer(req, doc[, next]).</p></td>
         </tr>
 
 	
@@ -1528,7 +1653,7 @@ One transformer is built in, the restricted transformer, and cannot be changed.<
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-153">line 153</a>
+				 <a href="model.js.html#sunlight-1-line-191">line 191</a>
 			</li>
 		</ul>
 	</dd>
@@ -1591,7 +1716,7 @@ One transformer is built in, the restricted transformer, and cannot be changed.<
         
             
 <dt>
-    <h4 class="name" id="transformPopulate"><span class="type-signature"></span>transformPopulate<span class="signature">(field, fn(req,)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="transformPopulate"><span class="type-signature"></span>transformPopulate<span class="signature">(field, transformer)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
     
     
 </dt>
@@ -1640,6 +1765,11 @@ your application more secure by removing fields you don't want people to see.</p
 
             <td class="type">
             
+                
+<span class="param-type">String</span>
+
+
+            
             </td>
 
             
@@ -1653,10 +1783,15 @@ your application more secure by removing fields you don't want people to see.</p
 
         <tr>
             
-                <td class="name"><code>fn(req,</code></td>
+                <td class="name"><code>transformer</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
             
             </td>
 
@@ -1664,7 +1799,7 @@ your application more secure by removing fields you don't want people to see.</p
 
             
 
-            <td class="description last"><p>doc) - The transform function</p></td>
+            <td class="description last"><p>The transform function(req, doc[, next])</p></td>
         </tr>
 
 	
@@ -1701,7 +1836,7 @@ your application more secure by removing fields you don't want people to see.</p
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-172">line 172</a>
+				 <a href="model.js.html#sunlight-1-line-211">line 211</a>
 			</li>
 		</ul>
 	</dd>
@@ -1724,6 +1859,29 @@ your application more secure by removing fields you don't want people to see.</p
     
     
     
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>The instance of this model</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+	</dd>
+</dl>
+
+
+        
     
     
         <h5>Example</h5>
@@ -1859,7 +2017,7 @@ to this model.</p>
 		<ul class="dummy">
 			<li>
 				<a href="model.js.html">model.js</a>,
-				 <a href="model.js.html#sunlight-1-line-222">line 222</a>
+				 <a href="model.js.html#sunlight-1-line-302">line 302</a>
 			</li>
 		</ul>
 	</dd>
@@ -1935,7 +2093,7 @@ to this model.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu Aug 7th 2014 using the <a
+		on Tue Aug 12th 2014 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
