@@ -3,6 +3,7 @@ Serves Mongoose models on an extensible RESTful API.
 
 [![Stories in Ready](https://badge.waffle.io/simplyianm/restifier.png?label=ready&title=Ready)](https://waffle.io/simplyianm/restifier)
 [![build status](https://secure.travis-ci.org/simplyianm/restifier.png)](http://travis-ci.org/simplyianm/restifier)
+[![Coverage Status](https://img.shields.io/coveralls/simplyianm/restifier.svg)](https://coveralls.io/r/simplyianm/restifier)
 
 ### Features at a Glance
 * **Tight integration with Mongoose and Express.**
