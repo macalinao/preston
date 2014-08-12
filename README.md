@@ -105,6 +105,8 @@ GET /users/Bob/badges/1?populate=things
 ```
 
 ### Update
+PUT and PATCH are handled the same way.
+
 ```
 PUT /users/Bob
 PATCH /users/Bob
