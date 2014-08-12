@@ -133,6 +133,41 @@ describe('Model', function() {
       });
     });
 
+    it('should synchronously ignore untransformable fields', function(done) {
+      User.transformPopulate('age', function(req, doc) {
+        doc.name = 'Tim';
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            age: 10
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.age.name).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should asynchronously ignore unpopulatable fields', function(done) {
+      User.transformPopulate('age', function(req, doc, next) {
+        async.times(1, function() {
+          doc.name = 'Tim';
+          next();
+        });
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            age: 10
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.age.name).to.be.undefined;
+        done();
+      });
+    });
+
     it('should not transform a non-existent field', function(done) {
       User.transformPopulate('dne', function(req, doc) {
         doc.asdf = 'asdf';
