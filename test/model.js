@@ -31,6 +31,32 @@ describe('Model', function() {
     expect(User.restricted).to.eql(['password']);
   });
 
+  describe('modifiers', function() {
+    it('should synchronously modify params', function() {
+      User.modifyParam('name', function(req, value) {
+        return 'Tim';
+      });
+      User.applyModifiers({
+        query: {}
+      }, function(err, req) {
+        expect(req.query.name).to.equal('Tim');
+      });
+    });
+
+    it('should asynchronously modify params', function() {
+      User.modifyParam('name', function(req, value, next) {
+        async.times(1, function() {
+          next(null, 'Tim');
+        });
+      });
+      User.applyModifiers({
+        query: {}
+      }, function(err, req) {
+        expect(req.query.name).to.equal('Tim');
+      });
+    });
+  });
+
   describe('transforms', function() {
     it('should synchronously transform the document', function(done) {
       User.transform(function(req, doc) {
