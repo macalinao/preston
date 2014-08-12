@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "pretest": "node_modules/.bin/jshint lib/ test/",
-    "test": "node_modules/.bin/mocha --reporter spec"
+    "test": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && rm -rf ./coverage",
+    "test-coveralls": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -32,13 +33,16 @@
     "async": "^0.9.0",
     "body-parser": "^1.5.0",
     "chai": "~1.8.1",
+    "coveralls": "^2.11.1",
     "grunt": "^0.4.5",
     "grunt-gh-pages": "^0.9.1",
     "grunt-jsdoc": "^0.5.6",
     "grunt-mocha-test": "^0.11.0",
     "ink-docstrap": "^0.4.12",
+    "istanbul": "^0.3.0",
     "jshint": "^2.5.2",
     "mocha": "~1.17.0",
+    "mocha-lcov-reporter": "0.0.1",
     "mongoose": "^3.8.13",
     "supertest": "^0.13.0"
   }
