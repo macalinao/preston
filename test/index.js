@@ -54,9 +54,8 @@ describe('restifier', function() {
 
   describe('quick initialize', function() {
     it('should add the appropriate error handlers', function(done) {
-      app.use(restifier());
-      app.use(restifier(User, Post));
-      app.use(restifier.finish());
+      restifier(User, Post);
+      app.use(restifier.middleware());
 
       request(app).get('/users/Bobb').end(function(err, res) {
         expect(err).to.be.null;
