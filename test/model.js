@@ -208,5 +208,33 @@ describe('Model', function() {
       });
     });
 
+    it('should allow chaining population', function(done) {
+      User.transformPopulate('friends', function(req, doc) {
+        doc.name = 'Tim';
+      }).transformPopulate('spouse', function(req, doc) {
+        doc.name = 'Bob';
+      }).transform(function(req, doc) {
+        doc.name = 'Frank';
+      }).transform(function(req, doc) {
+        doc.age += 20;
+      });
+      User.applyTransforms(null, {
+        toObject: function() {
+          return {
+            friends: [{}, {}, {}],
+            spouse: {},
+            age: 40
+          };
+        }
+      }, function(err, doc) {
+        expect(doc.name).to.equal('Frank');
+        expect(doc.age).to.equal(60);
+        expect(doc.friends[0].name).to.equal('Tim');
+        expect(doc.friends.length).to.equal(3);
+        expect(doc.spouse.name).to.equal('Bob');
+        done();
+      });
+    });
+
   });
 });
