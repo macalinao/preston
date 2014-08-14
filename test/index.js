@@ -45,8 +45,8 @@ describe('rest', function() {
   describe('api reset', function() {
     it('should create a brand new api', function() {
       rest(User, Post);
-      var models = rest.instance.models;
-      expect(models).to.eql(rest.instance.models);
+      var models = rest.models;
+      expect(models).to.eql(rest.models);
       expect(models).to.not.eql(restifier.api().models);
     });
   });

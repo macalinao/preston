@@ -26,12 +26,18 @@
     "url": "https://github.com/simplyianm/restifier/issues"
   },
   "dependencies": {
-    "express": "^4.6.1",
+    "async": "^0.9.0",
+    "body-parser": "^1.6.3",
+    "chai": "^1.8.1",
+    "express": "^4.8.3",
+    "functionize": "^0.1.1",
+    "jshint": "^2.5.3",
     "lodash": "^2.4.1",
+    "mocha": "^1.17.1",
+    "mongoose": "^3.9.0",
     "res-error": "^0.3.1"
   },
   "devDependencies": {
-    "async": "^0.9.0",
     "body-parser": "^1.5.0",
     "chai": "~1.8.1",
     "coveralls": "^2.11.1",
