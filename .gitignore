@@ -1,6 +1,5 @@
 *.swp
 .DS_Store
 .grunt/
-docs/
 node_modules/
 npm-debug.log

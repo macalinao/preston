@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       dist: {
         src: ['README.md', 'lib/*.js', 'test/*.js'],
         options: {
-          destination: 'docs',
+          destination: 'site/docs',
           template: 'node_modules/ink-docstrap/template',
           configure: 'jsdoc.conf.json'
         }
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
     },
     'gh-pages': {
       options: {
-        base: 'docs'
+        base: 'site'
       },
       src: ['**']
     }
