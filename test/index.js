@@ -8,10 +8,12 @@ var mongoose = require('mongoose');
 var request = require('supertest');
 var restifier = require('..');
 
-describe('restifier', function() {
-  var app, server, User, Post;
+describe('rest', function() {
+  var app, server, User, Post, rest;
 
   before(function(done) {
+    rest = restifier.api().asFunction();
+
     // Some setup
     mongoose.connect('mongodb://localhost:27017/test');
     User = mongoose.model('User', new mongoose.Schema({
@@ -45,17 +47,17 @@ describe('restifier', function() {
 
   describe('api reset', function() {
     it('should create a brand new api', function() {
-      restifier(User, Post);
-      var models = restifier.instance.models;
-      expect(models).to.eql(restifier.instance.models);
+      rest(User, Post);
+      var models = rest.instance.models;
+      expect(models).to.eql(rest.instance.models);
       expect(models).to.not.eql(restifier.api().models);
     });
   });
 
   describe('quick initialize', function() {
     it('should add the appropriate error handlers', function(done) {
-      restifier(User, Post);
-      app.use(restifier.middleware());
+      rest(User, Post);
+      app.use(rest.middleware());
 
       request(app).get('/users/Bobb').end(function(err, res) {
         expect(err).to.be.null;
@@ -67,8 +69,8 @@ describe('restifier', function() {
 
   describe('#middleware', function() {
     beforeEach(function() {
-      restifier(User, Post);
-      app.use(restifier.middleware());
+      rest(User, Post);
+      app.use(rest.middleware());
     });
 
     it('should add the appropriate error handlers', function(done) {
@@ -82,8 +84,8 @@ describe('restifier', function() {
 
   describe('405', function() {
     beforeEach(function() {
-      restifier(User, Post);
-      app.use(restifier.middleware());
+      rest(User, Post);
+      app.use(rest.middleware());
     });
 
     it('should not allow PUT collection', function(done) {
@@ -125,8 +127,8 @@ describe('restifier', function() {
 
   describe('404', function(done) {
     beforeEach(function() {
-      restifier(User, Post);
-      app.use(restifier.middleware());
+      rest(User, Post);
+      app.use(rest.middleware());
     });
 
     it('should 404 if model is invalid', function(done) {
@@ -150,18 +152,18 @@ describe('restifier', function() {
 
   describe('middleware', function(done) {
     it('should apply middleware', function(done) {
-      restifier(User, Post);
-      restifier.use(function(req, res, next) {
+      rest(User, Post);
+      rest.use(function(req, res, next) {
         res.set('yolo', 'swag');
         return next();
       });
-      restifier.use('/asdf', function(req, res, next) {
+      rest.use('/asdf', function(req, res, next) {
         res.set('young', 'mani');
         return res.status(200).send({
           message: 'hello mundo'
         });
       });
-      app.use(restifier.middleware());
+      app.use(rest.middleware());
 
       request(app).get('/asdf').end(function(err, res) {
         expect(err).to.be.null;
