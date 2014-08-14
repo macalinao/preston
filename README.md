@@ -25,7 +25,7 @@ $ npm install restifier --save
 ```
 
 ## Example
-The following example serves the `User` and `Page` models on a RESTful API.
+The following example serves the `User` and `Badge` models on a RESTful API.
 
 ```js
 var express = require('express');
