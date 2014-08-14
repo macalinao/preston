@@ -15,7 +15,6 @@ Serves Mongoose models on an extensible RESTful API.
 * **[Flexible query filtering system.](#filters)**
 * **[Document transformer system.](#transformers)** Control what gets sent to which clients.
 * **[Built with Angular in mind.](#angularjs-integration)**
-* **Test coverage.** While probably not at 100%, it is pretty well covered.
 
 ## Installation
 This module is installed via npm:
