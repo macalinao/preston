@@ -147,4 +147,30 @@ describe('restifier', function() {
       });
     });
   });
+
+  describe('middleware', function(done) {
+    it('should apply middleware', function(done) {
+      restifier(User, Post);
+      restifier.use(function(req, res, next) {
+        res.set('yolo', 'swag');
+        return next();
+      });
+      restifier.use('/asdf', function(req, res, next) {
+        res.set('young', 'mani');
+        return res.status(200).send({
+          message: 'hello mundo'
+        });
+      });
+      app.use(restifier.middleware());
+
+      request(app).get('/asdf').end(function(err, res) {
+        expect(err).to.be.null;
+        expect(res.status).to.equal(200);
+        expect(res.header.yolo).to.equal('swag');
+        expect(res.header.young).to.equal('mani');
+        expect(res.body.message).to.equal('hello mundo');
+        done();
+      });
+    });
+  });
 });
