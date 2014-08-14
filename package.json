@@ -27,19 +27,14 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "body-parser": "^1.6.3",
-    "chai": "^1.8.1",
     "express": "^4.8.3",
     "functionize": "^0.1.1",
-    "jshint": "^2.5.3",
     "lodash": "^2.4.1",
-    "mocha": "^1.17.1",
-    "mongoose": "^3.9.0",
     "res-error": "^0.3.1"
   },
   "devDependencies": {
     "body-parser": "^1.5.0",
-    "chai": "~1.8.1",
+    "chai": "^1.8.1",
     "coveralls": "^2.11.1",
     "grunt": "^0.4.5",
     "grunt-gh-pages": "^0.9.1",
@@ -48,9 +43,9 @@
     "ink-docstrap": "^0.4.12",
     "istanbul": "^0.3.0",
     "jshint": "^2.5.2",
-    "mocha": "~1.17.0",
+    "mocha": "^1.17.1",
     "mocha-lcov-reporter": "0.0.1",
-    "mongoose": "^3.8.13",
+    "mongoose": "^3.9.0",
     "supertest": "^0.13.0"
   }
 }
