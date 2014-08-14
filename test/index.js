@@ -11,12 +11,12 @@ var restifier = require('..');
 describe('rest', function() {
   var app, server, User, Post, rest;
 
-  before(function(done) {
+  beforeEach(function(done) {
     rest = restifier.api().asFunction();
 
     // Some setup
-    mongoose.connect('mongodb://localhost:27017/test');
-    User = mongoose.model('User', new mongoose.Schema({
+    var conn = mongoose.createConnection('mongodb://localhost:27017/test');
+    User = conn.model('User', new mongoose.Schema({
       name: {
         id: true,
         type: String
@@ -24,7 +24,7 @@ describe('rest', function() {
       description: String
     }));
 
-    Post = mongoose.model('Post', new mongoose.Schema({
+    Post = conn.model('Post', new mongoose.Schema({
       name: {
         id: true,
         type: String
@@ -36,13 +36,10 @@ describe('rest', function() {
       name: 'Bob',
       description: 'test'
     });
-
-    bob.save(done);
-  });
-
-  beforeEach(function() {
     app = express();
     app.use(bodyParser.json());
+
+    bob.save(done);
   });
 
   describe('api reset', function() {

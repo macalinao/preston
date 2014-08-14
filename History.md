@@ -1,3 +1,8 @@
+0.2
+=====
+* Add `RestAPI#asFunction` to allow creating multiple APIs in an intuitive way
+* Update tests to use RestAPI#asFunction to prevent conflicts with other tests
+
 0.1.10
 =====
 * Added async calling of transformers and modifiers
