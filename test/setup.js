@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var restifier = require('../lib/');
 
 module.exports = function setup(done) {
+  var rest = restifier.api().asFunction();
   var conn = mongoose.createConnection('mongodb://localhost:27017/testdb');
   var User = conn.model('User', new mongoose.Schema({
     name: {
@@ -49,11 +50,9 @@ module.exports = function setup(done) {
 
   var app = express();
 
-  restifier.reset();
-
   app.use(require('body-parser').json());
 
-  var UserModel = restifier(User);
+  var UserModel = rest(User);
   UserModel
     .use('all', function(req, res, next) {
       res.set('Middleware-All', 'true');
@@ -81,7 +80,7 @@ module.exports = function setup(done) {
     });
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
 
-  app.use(restifier.middleware());
+  app.use(rest.middleware());
 
   var users = {};
 
@@ -134,6 +133,7 @@ module.exports = function setup(done) {
     app: app,
     conn: conn,
     User: UserModel,
-    Comment: CommentModel
+    Comment: CommentModel,
+    rest: rest
   };
 };
