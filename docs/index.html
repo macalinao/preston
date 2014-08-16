@@ -102,11 +102,12 @@
 
 
     <section class="readme-section">
-        <article><h1>Restifier</h1>
-<p>Serves Mongoose models on an extensible RESTful API.</p>
-<p><a href="https://waffle.io/simplyianm/restifier"><img src="https://badge.waffle.io/simplyianm/restifier.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
-<a href="http://travis-ci.org/simplyianm/restifier"><img src="https://secure.travis-ci.org/simplyianm/restifier.png" alt="build status"></a>
-<a href="https://coveralls.io/r/simplyianm/restifier"><img src="https://img.shields.io/coveralls/simplyianm/restifier.svg" alt="Coverage Status"></a></p>
+        <article><h1>Preston</h1>
+<p>Piece-of-cake REST on Node.</p>
+<p>Preston serves Mongoose models on an extensible RESTful API. It handles routing and provides extensibility.</p>
+<p><a href="https://waffle.io/simplyianm/preston"><img src="https://badge.waffle.io/simplyianm/preston.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
+<a href="http://travis-ci.org/simplyianm/preston"><img src="https://secure.travis-ci.org/simplyianm/preston.png" alt="build status"></a>
+<a href="https://coveralls.io/r/simplyianm/preston"><img src="https://img.shields.io/coveralls/simplyianm/preston.svg" alt="Coverage Status"></a></p>
 <h3>Features at a Glance</h3>
 <ul>
 <li><strong>Tight integration with Mongoose and Express.</strong><ul>
@@ -125,17 +126,17 @@
 </ul>
 <h2>Installation</h2>
 <p>This module is installed via npm:</p>
-<pre><code class="lang-bash">$ npm install restifier --save</code></pre>
+<pre><code class="lang-bash">$ npm install preston --save</code></pre>
 <h2>Example</h2>
 <p>The following example serves the <code>User</code> and <code>Badge</code> models on a RESTful API.</p>
 <pre><code class="lang-js">var express = require('express');
-var restifier = require('restifier');
+var preston = require('preston');
 
 var app = express();
 
 app.use(require('body-parser').json()); // Required
 
-var User = restifier(mongoose.model('User', new mongoose.Schema({
+var User = preston(mongoose.model('User', new mongoose.Schema({
   name: {
     type: String,
     id: true, // The id used in the route
@@ -161,11 +162,11 @@ var Badge = User.submodel('badges', 'owner', mongoose.model('Badge', new mongoos
   content: String
 })));
 
-app.use('/api', restifier.middleware()); // Serve the api on /api.
+app.use('/api', preston.middleware()); // Serve the api on /api.
 
 app.listen(3000);</code></pre>
 <h2>REST API</h2>
-<p>Restifier uses the MongoDB collection name to determine the name of the base route, so the <code>User</code> model would create routes under <code>/users</code>.</p>
+<p>Preston uses the MongoDB collection name to determine the name of the base route, so the <code>User</code> model would create routes under <code>/users</code>.</p>
 <h3>Query</h3>
 <p>Querying takes in the following parameters:
 <em> <code>field</code> - Replace <code>field</code> with any field in your Mongoose model, and it will check for equality.
@@ -200,15 +201,15 @@ PATCH /users/Bob/badges/1</code></pre>
 <pre><code>DELETE /users/Bob
 DELETE /users/Bob/badges/1</code></pre>
 <h2>Creating an API</h2>
-<p>First, declare all of your models using <code>restifier(mongooseModel)</code>. This function returns a <code>Model</code> object which can be altered. (see the JSDocs)</p>
+<p>First, declare all of your models using <code>preston(mongooseModel)</code>. This function returns a <code>Model</code> object which can be altered. (see the JSDocs)</p>
 <p>Next, serve the API as middleware:</p>
-<pre><code>app.use('/api', restifier.middleware());</code></pre>
+<pre><code>app.use('/api', preston.middleware());</code></pre>
 <p>This will create a middleware that will be used by Express.</p>
 <h3>Namespace Collision</h3>
 <p>In the case of namespace collision, routes are handled sequentially by Express. Declare your custom routes
 before using the middleware. For example:</p>
 <pre><code>app.post('/api/login', myLoginHandler);
-app.use('/api', restifier.middleware());</code></pre>
+app.use('/api', preston.middleware());</code></pre>
 <p>is the appropriate way to add functionality to your API.</p>
 <h3>Route middleware</h3>
 <p>There are 5 types of routes: query, create, get, update, and destroy. You can apply middleware to a single one of these routes by doing the following:</p>
@@ -234,7 +235,7 @@ app.use('/api', restifier.middleware());</code></pre>
 <p>Passport exposes a <code>user</code> property on the request, so we can deal with that directly in our middleware. If we were to use something like <a href="https://github.com/ForbesLindesay/connect-roles">connect-roles</a>, we would do something like this:</p>
 <pre><code class="lang-js">model.use('all', user.can('operate on the model'));</code></pre>
 <h2>The Query Pipeline</h2>
-<p>Restifier was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.</p>
+<p>Preston was designed to be very flexible so it could be used as a backend for any app. Thus, queries go through a series of steps before being transformed into what is sent to the client.</p>
 <pre><code>Modifiers --&gt; Parameters --&gt; Filters --&gt; Population --&gt; Execution --&gt; Transformers</code></pre>
 <h3>Modifiers</h3>
 <p>Modifiers alter the query parameters that will be passed to the pipeline. For example, you could have a modifier that forces sorting by name ascending, as shown below:</p>
@@ -288,9 +289,9 @@ app.use('/api', restifier.middleware());</code></pre>
 <p>This software was built with <a href="https://angularjs.org/">Angular</a> in mind. Use the module <a href="https://github.com/mgonto/restangular">Restangular</a> to deal with the generated API
 in a very intuitive manner.</p>
 <h2>Example Apps</h2>
-<p>Here are some apps that use Restifier. If you have one you'd like to share, please don't be afraid to send a PR!</p>
+<p>Here are some apps that use Preston. If you have one you'd like to share, please don't be afraid to send a PR!</p>
 <ul>
-<li><a href="https://github.com/simplyianm/todo-restifier">todo-restifier</a> - A Restifier-powered Todo app made with Angular, Restangular, Bootstrap, and Restifier.</li>
+<li><a href="https://github.com/simplyianm/todo-preston">todo-preston</a> - A Preston-powered Todo app made with Angular, Restangular, Bootstrap, and Preston.</li>
 </ul>
 <h2>License</h2>
 <p>Copyright (c) 2014 Ian Macalinao. Released under the MIT License, which can be viewed in the attached <code>LICENSE</code> file.</p></article>
@@ -315,7 +316,7 @@ in a very intuitive manner.</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Thu Aug 14th 2014 using the <a
+		on Fri Aug 15th 2014 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
