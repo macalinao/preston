@@ -1,5 +1,5 @@
 {
-  "name": "restifier",
+  "name": "preston",
   "version": "0.2.0",
   "description": "Serves Mongoose models on a flexible, RESTful API.",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/simplyianm/restifier"
+    "url": "https://github.com/simplyianm/preston"
   },
   "keywords": [
     "mongoose",
@@ -23,7 +23,7 @@
   "author": "Ian Macalinao <me@ian.pw>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/simplyianm/restifier/issues"
+    "url": "https://github.com/simplyianm/preston/issues"
   },
   "dependencies": {
     "async": "^0.9.0",
