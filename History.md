@@ -1,4 +1,4 @@
-0.2
+0.2.0
 =====
 * Add `RestAPI#asFunction` to allow creating multiple APIs in an intuitive way
 * Update tests to use RestAPI#asFunction to prevent conflicts with other tests
