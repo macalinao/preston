@@ -10,7 +10,7 @@
     "dateFormat": "ddd MMM Do YYYY",
     "outputSourceFiles": true,
     "outputSourcePath": true,
-    "systemName": "Restifier",
+    "systemName": "Preston",
     "footer": "",
     "copyright": "Copyright (c) 2014 Ian Macalinao. Released under the MIT License.",
     "navType": "vertical",
