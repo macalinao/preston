@@ -1,3 +1,8 @@
+0.2.1
+=====
+* Fix bug where an incorrect ObjectId wouldn't 404
+* First release where we're renamed to Preston
+
 0.2.0
 =====
 * Add `RestAPI#asFunction` to allow creating multiple APIs in an intuitive way
