@@ -7,7 +7,7 @@ var http = require('http');
 var mongoose = require('mongoose');
 var request = require('supertest');
 
-var restifier = require('../lib/');
+var preston = require('..');
 var setup = require('./setup');
 
 describe('Model', function() {

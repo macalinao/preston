@@ -5,10 +5,10 @@ var express = require('express');
 var http = require('http');
 var mongoose = require('mongoose');
 
-var restifier = require('../lib/');
+var preston = require('..');
 
 module.exports = function setup(done) {
-  var rest = restifier.api().asFunction();
+  var rest = preston.api().asFunction();
   var conn = mongoose.createConnection('mongodb://localhost:27017/testdb');
   var User = conn.model('User', new mongoose.Schema({
     name: {
