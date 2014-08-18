@@ -50,7 +50,7 @@ module.exports = function setup(done) {
 
   var app = express();
 
-  //app.use(require('body-parser').json());
+  app.use(require('body-parser').json());
 
   var UserModel = rest(User);
   UserModel
