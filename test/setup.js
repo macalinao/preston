@@ -31,7 +31,8 @@ module.exports = function setup(done) {
       ref: 'Contact'
     }
   }));
-  var Comment = conn.model('Comment', new mongoose.Schema({
+
+  var CommentSchema = new mongoose.Schema({
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
@@ -42,7 +43,14 @@ module.exports = function setup(done) {
       id: true,
       unique: true
     }
-  }));
+  });
+  CommentSchema.statics.setupPreston = function(model) {
+    model.transform(function(req, doc) {
+      doc.modifiedWithinModel = true;
+    });
+  };
+
+  var Comment = conn.model('Comment', CommentSchema);
   var Contact = conn.model('Contact', new mongoose.Schema({
     name: String,
     enable: Boolean

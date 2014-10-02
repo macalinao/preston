@@ -275,6 +275,20 @@ model.transformPopulate('owners', function(req, doc) {
 });
 ```
 
+### Model Setup Within Schema
+You can also easily set up a model by declaring a `setupPreston(model)` static function within the schema like so:
+
+```js
+MySchema.statics.setupPreston = function(model) {
+  // Anything can go here modifying the model
+  model.transform(function(req, doc) {
+    doc.modifiedWithinModel = true;
+  });
+}
+```
+
+This is to keep your code organized if you like to have a separate file for each model.
+
 ## AngularJS Integration
 This software was built with [Angular](https://angularjs.org/) in mind. Use the module [Restangular](https://github.com/mgonto/restangular) to deal with the generated API
 in a very intuitive manner.

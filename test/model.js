@@ -237,4 +237,21 @@ describe('Model', function() {
     });
 
   });
+
+  describe('setupPreston static', function() {
+
+    it('should call the setupPreston function', function(done) {
+      Comment.applyTransforms(null, {
+          toObject: function() {
+            return {};
+          }
+        },
+        function(err, doc) {
+          expect(doc.modifiedWithinModel).to.be.true;
+          done();
+        });
+    });
+
+  });
+
 });
