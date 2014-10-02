@@ -1,3 +1,7 @@
+0.2.2
+=====
+* Add `setupPreston()` method
+
 0.2.1
 =====
 * Fix bug where an incorrect ObjectId wouldn't 404

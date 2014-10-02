@@ -1,6 +1,6 @@
 {
   "name": "preston",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Serves Mongoose models on a flexible, RESTful API.",
   "main": "index.js",
   "scripts": {
