@@ -672,6 +672,12 @@ pre .hljs {
   this.transform(function(req, doc) {
     doc.id = doc[thiz.id];
   });
+
+  // Call setupPreston static if exists
+  var setup = model.schema.statics.setupPreston;
+  if (setup) {
+    setup.call(model.schema, this);
+  }
 }</code></pre>
 
                                 </section>
