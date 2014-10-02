@@ -298,5 +298,13 @@ Here are some apps that use Preston. If you have one you'd like to share, please
 
 * [todo-preston](https://github.com/simplyianm/todo-preston) - A Preston-powered Todo app made with Angular, Restangular, Bootstrap, and Preston.
 
+## Contributing
+Contributions are very welcome! Just send a pull request. Feel free to contact me using one of the options on [my website](http://ian.pw)!
+
+### Running the Tests
+Do `npm install` to install all of the dependencies, ensure that [MongoDB](http://mongodb.org) is installed, then run `npm test` to run the unit tests.
+
+*Note: The tests like to fail on Travis because Travis's database stuff is slow.*
+
 ## License
 Copyright (c) 2014 Ian Macalinao. Released under the MIT License, which can be viewed in the attached `LICENSE` file.
