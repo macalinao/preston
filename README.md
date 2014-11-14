@@ -31,6 +31,7 @@ The following example serves the `User` and `Badge` models on a RESTful API.
 ```js
 var express = require('express');
 var preston = require('preston');
+var mongoose = require('mongoose');
 
 var app = express();
 
