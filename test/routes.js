@@ -126,6 +126,19 @@ describe('routes', function() {
           done();
         });
     });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).post('/users')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-create-error']).to.equal('true');
+          done();
+        });
+    });
   });
 
   describe('get', function() {
@@ -191,6 +204,19 @@ describe('routes', function() {
           expect(res.header['middleware-get']).to.equal('true');
           expect(res.header['middleware-update']).to.be.undefined;
           expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).get('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-get-error']).to.equal('true');
           done();
         });
     });
@@ -315,6 +341,19 @@ describe('routes', function() {
           done();
         });
     });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-update-error']).to.equal('true');
+          done();
+        });
+    });
   });
 
   describe('destroy', function() {
@@ -388,6 +427,19 @@ describe('routes', function() {
           expect(res.header['middleware-get']).to.be.undefined;
           expect(res.header['middleware-update']).to.be.undefined;
           expect(res.header['middleware-destroy']).to.equal('true');
+          done();
+        });
+    });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).delete('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-destroy-error']).to.equal('true');
           done();
         });
     });

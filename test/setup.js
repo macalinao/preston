@@ -93,6 +93,40 @@ module.exports.data = function data(done) {
     .use('destroy', function(req, res, next) {
       res.set('Middleware-Destroy', 'true');
       next();
+    })
+    .use('all', function(req, res, next) {
+      if (req.param('causeError')) {
+        return next('error');
+      }
+      next();
+    })
+    .use('get', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Get-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('create', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Create-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('update', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Update-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('destroy', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Destroy-Error', 'true');
+      } finally {
+        next(err);
+      }
     });
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
 
