@@ -13,15 +13,14 @@ describe('query', function() {
   var app, conn, User, Comment;
 
   before(function() {
-    var ret = setup.models();
-    app = ret.app;
-    conn = ret.conn;
-    User = ret.User;
-    Comment = ret.Comment;
+    conn = setup.models();
   });
 
   beforeEach(function(done) {
-    setup.data(done);
+    var ret = setup.data(done);
+    app = ret.app;
+    User = ret.User;
+    Comment = ret.Comment;
   });
 
   afterEach(function(done) {
