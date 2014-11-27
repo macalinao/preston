@@ -9,13 +9,13 @@ var request = require('supertest');
 var restifier = require('..');
 
 describe('rest', function() {
-  var app, server, User, Post, rest;
+  var app, conn, server, User, Post, rest;
 
-  beforeEach(function(done) {
+  before(function(done) {
     rest = restifier.api().asFunction();
 
     // Some setup
-    var conn = mongoose.createConnection('mongodb://localhost:27017/test');
+    conn = mongoose.createConnection('mongodb://localhost:27017/test');
     User = conn.model('User', new mongoose.Schema({
       name: {
         id: true,
@@ -40,6 +40,13 @@ describe('rest', function() {
     app.use(bodyParser.json());
 
     bob.save(done);
+  });
+
+  after(function(done) {
+    this.timeout(5000);
+    conn.db.dropDatabase(function(err) {
+      done(err);
+    });
   });
 
   describe('api reset', function() {

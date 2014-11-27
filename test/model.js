@@ -13,15 +13,31 @@ var setup = require('./setup');
 describe('Model', function() {
   var app, conn, User, Comment;
 
-  beforeEach(function(done) {
-    var ret = setup(done);
+  before(function() {
+    var ret = setup.models();
     app = ret.app;
     conn = ret.conn;
     User = ret.User;
     Comment = ret.Comment;
   });
 
+  beforeEach(function(done) {
+    setup.data(done);
+  });
+
   afterEach(function(done) {
+    async.parallel([
+      function(callback) {
+        User.model.remove({}, callback);
+      },
+      function(callback) {
+        Comment.model.remove({}, callback);
+      }
+    ], done);
+  });
+
+  after(function(done) {
+    this.timeout(5000);
     conn.db.dropDatabase(function(err) {
       done(err);
     });

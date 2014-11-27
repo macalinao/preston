@@ -7,10 +7,12 @@ var mongoose = require('mongoose');
 
 var preston = require('..');
 
-module.exports = function setup(done) {
+var User, Comment, Contact;
+
+module.exports.models = function models() {
   var rest = preston.api().asFunction();
   var conn = mongoose.createConnection('mongodb://localhost:27017/testdb');
-  var User = conn.model('User', new mongoose.Schema({
+  User = conn.model('User', new mongoose.Schema({
     name: {
       type: String,
       id: true,
@@ -50,8 +52,8 @@ module.exports = function setup(done) {
     });
   };
 
-  var Comment = conn.model('Comment', CommentSchema);
-  var Contact = conn.model('Contact', new mongoose.Schema({
+  Comment = conn.model('Comment', CommentSchema);
+  Contact = conn.model('Contact', new mongoose.Schema({
     name: String,
     enable: Boolean
   }));
@@ -89,6 +91,17 @@ module.exports = function setup(done) {
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
 
   app.use(rest.middleware());
+
+  return {
+    app: app,
+    conn: conn,
+    User: UserModel,
+    Comment: CommentModel,
+    rest: rest
+  };
+};
+
+module.exports.data = function data(done) {
 
   var users = {};
 
@@ -136,12 +149,4 @@ module.exports = function setup(done) {
       }
     ], next);
   }, done);
-
-  return {
-    app: app,
-    conn: conn,
-    User: UserModel,
-    Comment: CommentModel,
-    rest: rest
-  };
 };
