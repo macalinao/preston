@@ -87,7 +87,7 @@ describe('routes', function() {
           User.model.findOne({
             name: 'Bob'
           }).exec(function(err, bob) {
-            expect(res.body.author).to.equal(bob._id.toString());
+            expect(res.body.author._id.toString()).to.equal(bob._id.toString());
             done();
           });
         });
@@ -112,8 +112,8 @@ describe('routes', function() {
       User.id = 'name';
       request(app).post('/users')
         .send({
-          content: 'exists',
-          reaction: 'BobL'
+          name: 'Asdflol',
+          hobby: 'Baseball'
         })
         .end(function(err, res) {
           expect(err).to.be.null;
