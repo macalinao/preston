@@ -7,10 +7,11 @@ var mongoose = require('mongoose');
 
 var preston = require('..');
 
-module.exports = function setup(done) {
-  var rest = preston.api().asFunction();
+var User, Comment, Contact;
+
+module.exports.models = function models() {
   var conn = mongoose.createConnection('mongodb://localhost:27017/testdb');
-  var User = conn.model('User', new mongoose.Schema({
+  User = conn.model('User', new mongoose.Schema({
     name: {
       type: String,
       id: true,
@@ -50,11 +51,18 @@ module.exports = function setup(done) {
     });
   };
 
-  var Comment = conn.model('Comment', CommentSchema);
-  var Contact = conn.model('Contact', new mongoose.Schema({
+  Comment = conn.model('Comment', CommentSchema);
+  Contact = conn.model('Contact', new mongoose.Schema({
     name: String,
     enable: Boolean
   }));
+
+  return conn;
+};
+
+module.exports.data = function data(done) {
+  var rest = preston.api().asFunction();
+
 
   var app = express();
 
@@ -85,6 +93,40 @@ module.exports = function setup(done) {
     .use('destroy', function(req, res, next) {
       res.set('Middleware-Destroy', 'true');
       next();
+    })
+    .use('all', function(req, res, next) {
+      if (req.param('causeError')) {
+        return next('error');
+      }
+      next();
+    })
+    .use('get', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Get-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('create', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Create-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('update', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Update-Error', 'true');
+      } finally {
+        next(err);
+      }
+    })
+    .use('destroy', function(err, req, res, next) {
+      try {
+        res.set('Middleware-Destroy-Error', 'true');
+      } finally {
+        next(err);
+      }
     });
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
 
@@ -138,10 +180,9 @@ module.exports = function setup(done) {
   }, done);
 
   return {
-    app: app,
-    conn: conn,
     User: UserModel,
     Comment: CommentModel,
+    app: app,
     rest: rest
   };
 };
