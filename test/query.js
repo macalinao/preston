@@ -5,21 +5,37 @@ var express = require('express');
 var http = require('http');
 var mongoose = require('mongoose');
 var request = require('supertest');
+var async = require('async');
 
 var setup = require('./setup');
 
 describe('query', function() {
   var app, conn, User, Comment;
 
+  before(function() {
+    conn = setup.models();
+  });
+
   beforeEach(function(done) {
-    var ret = setup(done);
+    var ret = setup.data(done);
     app = ret.app;
-    conn = ret.conn;
     User = ret.User;
     Comment = ret.Comment;
   });
 
   afterEach(function(done) {
+    async.parallel([
+      function(callback) {
+        User.model.remove({}, callback);
+      },
+      function(callback) {
+        Comment.model.remove({}, callback);
+      }
+    ], done);
+  });
+
+  after(function(done) {
+    this.timeout(5000);
     conn.db.dropDatabase(function(err) {
       done(err);
     });

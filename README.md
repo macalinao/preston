@@ -31,6 +31,7 @@ The following example serves the `User` and `Badge` models on a RESTful API.
 ```js
 var express = require('express');
 var preston = require('preston');
+var mongoose = require('mongoose');
 
 var app = express();
 
@@ -164,6 +165,14 @@ The following fields are exposed in the request object:
 * `doc` -- The document being retrieved, or null if not operating on a document route
 * `parentDoc` -- The parent document being retrieved. Used for nested routes.
 * `req.query` - The `populate` and `sort` fields are parsed beforehand, `populate` being an Array of Strings and `sort` being an object.
+
+Error middleware can also be added to each route or for all routes:
+
+```js
+model.use('get', function(err, req, res, next) {
+  console.log('Error on model');
+});
+```
 
 #### Authentication middleware example with Passport
 Here is an example of using [Passport](http://passportjs.org/) to restrict access to a document:

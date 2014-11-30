@@ -5,21 +5,37 @@ var express = require('express');
 var http = require('http');
 var mongoose = require('mongoose');
 var request = require('supertest');
+var async = require('async');
 
 var setup = require('./setup');
 
 describe('routes', function() {
   var app, conn, User, Comment;
 
+  before(function() {
+    conn = setup.models();
+  });
+
   beforeEach(function(done) {
-    var ret = setup(done);
+    var ret = setup.data(done);
     app = ret.app;
-    conn = ret.conn;
     User = ret.User;
     Comment = ret.Comment;
   });
 
   afterEach(function(done) {
+    async.parallel([
+      function(callback) {
+        User.model.remove({}, callback);
+      },
+      function(callback) {
+        Comment.model.remove({}, callback);
+      }
+    ], done);
+  });
+
+  after(function(done) {
+    this.timeout(5000);
     conn.db.dropDatabase(function(err) {
       done(err);
     });
@@ -71,7 +87,7 @@ describe('routes', function() {
           User.model.findOne({
             name: 'Bob'
           }).exec(function(err, bob) {
-            expect(res.body.author).to.equal(bob._id.toString());
+            expect(res.body.author._id.toString()).to.equal(bob._id.toString());
             done();
           });
         });
@@ -96,8 +112,8 @@ describe('routes', function() {
       User.id = 'name';
       request(app).post('/users')
         .send({
-          content: 'exists',
-          reaction: 'BobL'
+          name: 'Asdflol',
+          hobby: 'Baseball'
         })
         .end(function(err, res) {
           expect(err).to.be.null;
@@ -107,6 +123,19 @@ describe('routes', function() {
           expect(res.header['middleware-get']).to.be.undefined;
           expect(res.header['middleware-update']).to.be.undefined;
           expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).post('/users')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-create-error']).to.equal('true');
           done();
         });
     });
@@ -175,6 +204,19 @@ describe('routes', function() {
           expect(res.header['middleware-get']).to.equal('true');
           expect(res.header['middleware-update']).to.be.undefined;
           expect(res.header['middleware-destroy']).to.be.undefined;
+          done();
+        });
+    });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).get('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-get-error']).to.equal('true');
           done();
         });
     });
@@ -299,6 +341,19 @@ describe('routes', function() {
           done();
         });
     });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).put('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-update-error']).to.equal('true');
+          done();
+        });
+    });
   });
 
   describe('destroy', function() {
@@ -372,6 +427,19 @@ describe('routes', function() {
           expect(res.header['middleware-get']).to.be.undefined;
           expect(res.header['middleware-update']).to.be.undefined;
           expect(res.header['middleware-destroy']).to.equal('true');
+          done();
+        });
+    });
+
+    it('should use error handler middleware', function(done) {
+      User.id = 'name';
+      request(app).delete('/users/Bob')
+        .send({
+          causeError: true
+        })
+        .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res.header['middleware-destroy-error']).to.equal('true');
           done();
         });
     });
