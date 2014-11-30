@@ -1647,7 +1647,7 @@ pre .hljs {
   if (middleware.length === 4) {
     arr = this.errMiddlewares[route] || (this.errMiddlewares[route] = []);
   } else {
-    var arr = this.middlewares[route] || (this.middlewares[route] = []);
+    arr = this.middlewares[route] || (this.middlewares[route] = []);
   }
   arr.push(middleware);
   return this;
