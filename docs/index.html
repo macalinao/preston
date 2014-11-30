@@ -660,6 +660,7 @@ pre .hljs {
   this.transformers = [];
   this.submodels = {};
   this.middlewares = {};
+  this.errMiddlewares = {};
 
   // Remove restricted
   this.transform(function(req, doc) {
@@ -1334,7 +1335,11 @@ pre .hljs {
   function callTransform(req, doc, next) {
     var pop = doc[field];
     if (!pop) {
-      return;
+      if (next) {
+        return next();
+      } else {
+        return;
+      }
     }
 
     // Normalize
@@ -1638,7 +1643,12 @@ pre .hljs {
 
                                     <pre><code>Model.prototype.use = function(route, middleware) {
   route = route.toLowerCase();
-  var arr = this.middlewares[route] || (this.middlewares[route] = []);
+  var arr;
+  if (middleware.length === 4) {
+    arr = this.errMiddlewares[route] || (this.errMiddlewares[route] = []);
+  } else {
+    var arr = this.middlewares[route] || (this.middlewares[route] = []);
+  }
   arr.push(middleware);
   return this;
 };</code></pre>
@@ -1889,21 +1899,25 @@ pre .hljs {
   var middleware = [queryHelper.queryParser, queryHelper.docFetcher(this)];
   middleware = middleware.concat(this.middlewares.all || []); // &#x27;all&#x27; middleware
   var routeMiddleware = {};
+  var errMiddleware = this.errMiddlewares.all || [];
+  var errRouteMiddleware = {};
   [&#x27;query&#x27;, &#x27;create&#x27;, &#x27;get&#x27;, &#x27;update&#x27;, &#x27;destroy&#x27;].filter(function(route) {
     routeMiddleware[route] = middleware.slice()
       .concat(thiz.middlewares[route] || []);
+    errRouteMiddleware[route] = errMiddleware.slice().concat(thiz.errMiddlewares[route] || []);
   });
 
+
   router.route(uriBase)
-    .get(routeMiddleware.query, routes.query(this))
-    .post(routeMiddleware.create, routes.create(this))
+    .get(routeMiddleware.query, routes.query(this), errRouteMiddleware.query)
+    .post(routeMiddleware.create, routes.create(this), errRouteMiddleware.create)
     .all(routes.default);
 
   router.route(uriDoc)
-    .get(routeMiddleware.get, routes.get(this))
-    .put(routeMiddleware.update, routes.update(this))
-    .patch(routeMiddleware.update, routes.update(this))
-    .delete(routeMiddleware.destroy, routes.destroy(this))
+    .get(routeMiddleware.get, routes.get(this), errRouteMiddleware.get)
+    .put(routeMiddleware.update, routes.update(this), errRouteMiddleware.update)
+    .patch(routeMiddleware.update, routes.update(this), errRouteMiddleware.update)
+    .delete(routeMiddleware.destroy, routes.destroy(this), errRouteMiddleware.destroy)
     .all(routes.default);
 
   return this;
@@ -2750,7 +2764,7 @@ pre .hljs {
 
                                     <pre><code>exports.query = function(model) {
   var Mod = model.model;
-  return function(req, res) {
+  return function(req, res, next) {
     var query = Mod.find();
     var reqQuery = req.query;
 
@@ -2767,19 +2781,22 @@ pre .hljs {
         }
       } catch (err) {
         if (!err.code) {
-          throw err;
+          return next(err);
         }
         return;
       }
 
       query.exec(function(err, docs) {
         if (err) {
-          throw err;
+          return next(err);
         }
         async.map(docs, function(doc, next) {
           model.applyTransforms(req, doc, next);
         }, function(e, jsoned) {
           res.json(jsoned);
+          if (e) {
+            next(e);
+          }
         });
       });
     });
@@ -2788,7 +2805,7 @@ pre .hljs {
 
 exports.create = function(model) {
   var Mod = model.model;
-  return function(req, res) {
+  return function(req, res, next) {
     var doc = new Mod(req.body);
     if (req.parentDoc) {
       doc[model.parentCorrespondsTo] = req.parentDoc;
@@ -2796,27 +2813,35 @@ exports.create = function(model) {
     doc.save(function(err) {
       if (err) {
         if (err.err &amp;&amp; err.err.match(/duplicate key error/)) {
-          return res.error(409, Mod.modelName + &#x27; already exists.&#x27;);
+          res.error(409, Mod.modelName + &#x27; already exists.&#x27;);
+          return next(err);
         }
-        return res.error(500, err.message);
+        res.error(500, err.message);
+        return next(err);
       }
       model.applyTransforms(req, doc, function(err, jsoned) {
         res.json(jsoned);
+        if (err) {
+          next(err);
+        }
       });
     });
   };
 };
 
 exports.get = function(model) {
-  return function(req, res) {
+  return function(req, res, next) {
     model.applyTransforms(req, req.doc, function(err, jsoned) {
       res.json(jsoned);
+      if (err) {
+        next(err);
+      }
     });
   };
 };
 
 exports.update = function(model) {
-  return function(req, res) {
+  return function(req, res, next) {
     var doc = req.doc;
     var body = req.body;
     for (var prop in body) {
@@ -2828,22 +2853,25 @@ exports.update = function(model) {
 
     doc.save(function(err) {
       if (err) {
-        return res.error(500, err);
+        res.error(500, err);
+        return next(err);
       }
       model.applyTransforms(req, doc, function(err, jsoned) {
         res.json(jsoned);
+        next(err);
       });
     });
   };
 };
 
 exports.destroy = function(model) {
-  return function(req, res) {
+  return function(req, res, next) {
     req.doc.remove(function(err) {
       if (err) {
-        return res.error(500, err);
+        res.error(500, err);
+        return next(err);
       }
-      return res.json({
+      res.json({
         success: true
       });
     });
