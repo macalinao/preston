@@ -2,20 +2,15 @@ body {
   font-family: Lato, Arial, sans-serif;
 }
 
-.container {
-  margin: 0px auto;
-  width: 900px;
-}
-
 header {
   text-align: center;
+  height: 100%;
 }
 
 #logo {
   font-family: Montserrat, Arial, sans-serif;
   font-size: 150px;
   margin-top: 40px;
-  margin-bottom: -30px;
 }
 
 .subtitle {
@@ -25,10 +20,15 @@ header {
 pre {
   text-align: left;
   margin: 0px auto;
-  width: 700px;
+  width: 500px;
   background-color: #eee;
   font-size: 16px;
   padding: 10px 30px;
+}
+
+.buttons {
+  margin-top: 0px;
+  padding: 20px 10px;
 }
 
 /* Code formatting */

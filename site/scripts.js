@@ -1,5 +1,5 @@
 $(function() {
-  $('code').each(function() {
+  $('pre').each(function() {
     $(this).html(highlight($(this).text()));
   });
 });
