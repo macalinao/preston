@@ -270,7 +270,35 @@ pre .hljs {
                                 
 
                                     <li class="scope-public">
+                                        <a href="#model.js-model.prototype.geturibases">Model.getUriBases()</a>
+                                    </li>
+
+                                
+
+                            
+
+                        
+
+                            
+
+                                
+
+                                    <li class="scope-public">
                                         <a href="#model.js-model.prototype.serve">Model.serve()</a>
+                                    </li>
+
+                                
+
+                            
+
+                        
+
+                            
+
+                                
+
+                                    <li class="scope-public">
+                                        <a href="#model.js-model.prototype.printroutes">Model.printRoutes()</a>
                                     </li>
 
                                 
@@ -423,6 +451,20 @@ pre .hljs {
 
                                     <li class="scope-public">
                                         <a href="#preston.js-restapi.prototype.middleware">RestAPI.middleware()</a>
+                                    </li>
+
+                                
+
+                            
+
+                        
+
+                            
+
+                                
+
+                                    <li class="scope-public">
+                                        <a href="#preston.js-restapi.prototype.printroutes">RestAPI.printRoutes()</a>
                                     </li>
 
                                 
@@ -1834,6 +1876,63 @@ pre .hljs {
 
                                 
 
+                                <h2 id="model.js-model.prototype.geturibases">
+                                    <a href="#model.js-model.prototype.geturibases" class="permalink">#</a> Model.getUriBases()
+                                    
+                                </h2>
+
+                                <p>Gets the URI bases of the model.</p>
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                <section class="code">
+
+                                    <h3>Code</h3>
+
+                                    <pre><code>Model.prototype.getUriBases = function() {
+  var uriBase = &#x27;/&#x27; + (this.parent || this).model.collection.name;
+  var uriDoc = uriBase + &#x27;/:id&#x27;;
+  if (this.parent) {
+    uriBase = uriDoc + &#x27;/&#x27; + this.parentField;
+    uriDoc = uriBase + &#x27;/:sid&#x27;;
+  }
+
+  return {
+    base: uriBase,
+    doc: uriDoc
+  };
+};</code></pre>
+
+                                </section>
+
+                                <h3>Returns</h3>
+
+                                
+
+                            </div>
+
+                        
+
+                    
+
+                
+
+                    
+
+                        
+
+                            <div class="method scope-public">
+
+                                
+
                                 <h2 id="model.js-model.prototype.serve">
                                     <a href="#model.js-model.prototype.serve" class="permalink">#</a> Model.serve()
                                     
@@ -1889,12 +1988,9 @@ pre .hljs {
                                     <pre><code>Model.prototype.serve = function(router) {
   var thiz = this;
 
-  var uriBase = &#x27;/&#x27; + (this.parent || this).model.collection.name;
-  var uriDoc = uriBase + &#x27;/:id&#x27;;
-  if (this.parent) {
-    uriBase = uriDoc + &#x27;/&#x27; + this.parentField;
-    uriDoc = uriBase + &#x27;/:sid&#x27;;
-  }
+  var bases = this.getUriBases();
+  var uriBase = bases.base;
+  var uriDoc = bases.doc;
 
   var middleware = [queryHelper.queryParser, queryHelper.docFetcher(this)];
   middleware = middleware.concat(this.middlewares.all || []); // &#x27;all&#x27; middleware
@@ -1934,6 +2030,62 @@ pre .hljs {
                                 
 
                                     
+
+                                
+
+                            </div>
+
+                        
+
+                    
+
+                
+
+                    
+
+                        
+
+                            <div class="method scope-public">
+
+                                
+
+                                <h2 id="model.js-model.prototype.printroutes">
+                                    <a href="#model.js-model.prototype.printroutes" class="permalink">#</a> Model.printRoutes()
+                                    
+                                </h2>
+
+                                <p>Prints the routes corresponding to this model.</p>
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                <section class="code">
+
+                                    <h3>Code</h3>
+
+                                    <pre><code>Model.prototype.printRoutes = function() {
+  var bases = this.getUriBases();
+  var uriBase = bases.base;
+  var uriDoc = bases.doc;
+
+  console.log(&#x27;GET&#x27;, uriBase);
+  console.log(&#x27;POST&#x27;, uriBase);
+  console.log(&#x27;GET&#x27;, uriDoc);
+  console.log(&#x27;PUT&#x27;, uriDoc);
+  console.log(&#x27;PATCH&#x27;, uriDoc);
+  console.log(&#x27;DELETE&#x27;, uriDoc);
+};</code></pre>
+
+                                </section>
+
+                                <h3>Returns</h3>
 
                                 
 
@@ -2578,6 +2730,55 @@ pre .hljs {
 
                                 
 
+                                <h2 id="preston.js-restapi.prototype.printroutes">
+                                    <a href="#preston.js-restapi.prototype.printroutes" class="permalink">#</a> RestAPI.printRoutes()
+                                    
+                                </h2>
+
+                                <p>Prints all routes corresponding to this RestAPI.</p>
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                
+
+                                <section class="code">
+
+                                    <h3>Code</h3>
+
+                                    <pre><code>RestAPI.prototype.printRoutes = function() {
+  _.forEach(this.models, function(model) {
+    model.printRoutes();
+  });
+};</code></pre>
+
+                                </section>
+
+                                <h3>Returns</h3>
+
+                                
+
+                            </div>
+
+                        
+
+                    
+
+                
+
+                    
+
+                        
+
+                            <div class="method scope-public">
+
+                                
+
                                 <h2 id="preston.js-restifier">
                                     <a href="#preston.js-restifier" class="permalink">#</a> restifier
                                     
@@ -2813,17 +3014,15 @@ exports.create = function(model) {
     doc.save(function(err) {
       if (err) {
         if (err.err &amp;&amp; err.err.match(/duplicate key error/)) {
-          res.error(409, Mod.modelName + &#x27; already exists.&#x27;);
-          return next(err);
+          return res.error(409, Mod.modelName + &#x27; already exists.&#x27;);
         }
-        res.error(500, err.message);
-        return next(err);
+        return res.error(500, err.message);
       }
       model.applyTransforms(req, doc, function(err, jsoned) {
-        res.json(jsoned);
         if (err) {
-          next(err);
+          return next(err);
         }
+        res.json(jsoned);
       });
     });
   };
@@ -2853,12 +3052,13 @@ exports.update = function(model) {
 
     doc.save(function(err) {
       if (err) {
-        res.error(500, err);
-        return next(err);
+        return res.error(500, err);
       }
       model.applyTransforms(req, doc, function(err, jsoned) {
+        if (err) {
+          return res.error(500, err);
+        }
         res.json(jsoned);
-        next(err);
       });
     });
   };
