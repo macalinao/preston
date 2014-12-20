@@ -1,10 +1,7 @@
-body {
-  font-family: Lato, Arial, sans-serif;
-}
-
 header {
   text-align: center;
   height: 100%;
+  font-family: Lato, Arial, sans-serif;
 }
 
 #logo {
@@ -29,6 +26,11 @@ pre {
 .buttons {
   margin-top: 0px;
   padding: 20px 10px;
+}
+
+.buttons .btn {
+  font-weight: bold;
+  margin-top: -25px;
 }
 
 /* Code formatting */
