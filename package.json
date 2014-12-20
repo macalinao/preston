@@ -46,7 +46,7 @@
     "jshint": "^2.5.2",
     "mocha": "^1.17.1",
     "mocha-lcov-reporter": "0.0.1",
-    "mongoose": "^3.9.0",
+    "mongoose": "^3.8.21",
     "supertest": "^0.13.0"
   }
 }
