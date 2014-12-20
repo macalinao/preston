@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Preston | REST API generator for Mongoose/Node.js applications</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+  <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 id="logo">preston</h1>
+      <p class="subtitle">REST API generator for Mongoose models</p>
+      <div class="buttons">
+        <iframe src="http://ghbtns.com/github-btn.html?user=simplyianm&repo=preston&type=watch&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="150" height="30"></iframe>
+        <iframe src="http://ghbtns.com/github-btn.html?user=simplyianm&repo=preston&type=fork&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+        <a class="btn btn-primary" href="/docs">Read the JSDoc</a>
+      </div>
+
+      <code>npm install --save preston</code>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Code</h2>
+          <pre>
+preston(mongoose.model('User'));
+app.use(preston.middleware());
+preston.printRoutes();
+          </pre> 
+        </div>
+        <div class="col-md-6">
+          <h2>Output</h2>
+          <pre>
+GET /users
+POST /users
+GET /users/:id
+PUT /users/:id
+PATCH /users/:id
+DELETE /users/:id
+          </pre> 
+        </div>
+      </div> 
+    </header>
+    </div>
+
+    <a href="https://github.com/simplyianm/preston">
+      <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png">
+    </a>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+
+</html>

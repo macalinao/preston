@@ -1,0 +1,41 @@
+header {
+  text-align: center;
+  height: 100%;
+  font-family: Lato, Arial, sans-serif;
+}
+
+#logo {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 150px;
+  margin-top: 40px;
+}
+
+.subtitle {
+  font-size: 40px;
+}
+
+pre {
+  text-align: left;
+  margin: 0px auto;
+  width: 500px;
+  background-color: #eee;
+  font-size: 16px;
+  padding: 10px 30px;
+}
+
+.buttons {
+  margin-top: 0px;
+  padding: 20px 10px;
+}
+
+.buttons .btn {
+  font-weight: bold;
+  margin-top: -25px;
+}
+
+/* Code formatting */
+code .comment { color: #ddd }
+code .init { color: #2F6FAD }
+code .string { color: #5890AD }
+code .keyword { color: #8A6343 }
+code .number { color: #2F6FAD }

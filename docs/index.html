@@ -2081,6 +2081,10 @@ pre .hljs {
   console.log(&#x27;PUT&#x27;, uriDoc);
   console.log(&#x27;PATCH&#x27;, uriDoc);
   console.log(&#x27;DELETE&#x27;, uriDoc);
+
+  _.each(this.submodels, function(s) {
+    s.printRoutes();
+  });
 };</code></pre>
 
                                 </section>
