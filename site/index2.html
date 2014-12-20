@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Preston | REST API generator for Mongoose/Node.js applications</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href='http://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 id="logo">preston</h1>
+      <p class="subtitle">REST API generator for Mongoose models</p>
+      <pre>
+<code>
+preston(mongoose.model('User'))
+  .submodel(mongoose.model('Comment'));
+preston.printRoutes();
+</code> 
+      </pre> 
+      <h2>Output</h2>
+      <pre>
+<code>
+GET /users
+POST /users
+GET /users/:id
+PUT /users/:id
+PATCH /users/:id
+DELETE /users/:id
+GET /users/:id/comments
+POST /users/:id/comments
+GET /users/:id/comments/:sid
+PUT /users/:id/comments/:sid
+PATCH /users/:id/comments/:sid
+DELETE /users/:id/comments/:sid
+</code> 
+      </pre> 
+    </header>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
+
+</html>
