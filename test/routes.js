@@ -84,10 +84,11 @@ describe('routes', function() {
           expect(err).to.be.null;
           expect(res.status).to.equal(200);
           expect(res.body.content).to.equal('Test');
+          console.log(res.body);
           User.model.findOne({
             name: 'Bob'
           }).exec(function(err, bob) {
-            expect(res.body.author._id.toString()).to.equal(bob._id.toString());
+            expect(res.body.author).to.equal(bob._id.toString());
             done();
           });
         });

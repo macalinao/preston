@@ -62,8 +62,6 @@ module.exports.models = function models() {
 
 module.exports.data = function data(done) {
   var rest = preston.api().asFunction();
-
-
   var app = express();
 
   app.use(require('body-parser').json());
