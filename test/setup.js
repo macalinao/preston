@@ -118,7 +118,6 @@ module.exports.data = function data(done) {
   var CommentModel = UserModel.submodel('comments', 'author', Comment);
 
   app.use(rest.middleware());
-  rest.printRoutes();
 
   var users = {};
 
