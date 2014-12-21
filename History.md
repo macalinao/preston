@@ -1,3 +1,8 @@
+0.2.3
+=====
+* Add middleware for error handling
+* General documentation improvements
+
 0.2.2
 =====
 * Add `setupPreston()` method
