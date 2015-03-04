@@ -26,6 +26,7 @@ describe('Model', function() {
 
   afterEach(function(done) {
     async.parallel([
+
       function(callback) {
         User.model.remove({}, callback);
       },
@@ -73,6 +74,51 @@ describe('Model', function() {
   });
 
   describe('transforms', function() {
+    it('should synchronously transform many documents', function(done) {
+      User.transform(function(req, doc) {
+        doc.asdf = 'asdf';
+      });
+      User.applyTransforms(null, [{
+        toObject: function() {
+          return {};
+        }
+      }, {
+        toObject: function() {
+          return {};
+        }
+      }], function(err, docs) {
+        expect(docs).to.have.deep.property('[0].asdf', 'asdf');
+        expect(docs).to.have.deep.property('[1].asdf', 'asdf');
+        done();
+      });
+    });
+
+
+    it('should asynchronously transform many documents', function(done) {
+      User.transform(function(req, doc, next) {
+        async.times(1, function() {
+          doc.asdf = 'asdf';
+          next(null,doc);
+        });
+      });
+      User.applyTransforms(null, [{
+          toObject: function() {
+            return {};
+          }
+        }, {
+          toObject: function() {
+            return {};
+          }
+        }
+      ], function(err, docs) {
+        expect(docs).to.have.deep.property('[0].asdf', 'asdf');
+        expect(docs).to.have.deep.property('[1].asdf', 'asdf');
+        done();
+      });
+    });
+
+
+
     it('should synchronously transform the document', function(done) {
       User.transform(function(req, doc) {
         doc.asdf = 'asdf';
