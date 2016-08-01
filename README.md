@@ -272,7 +272,7 @@ model.transform(function(req, doc) {
 });
 ```
 
-Transformers are applied to each individual document in a query result.
+Transformers are applied to each individual document or document array in a query result.
 
 #### Population Transformers
 Population transformers are transformers that operate on populated fields. They can be used to make your application more secure by removing fields you don't want people to see.

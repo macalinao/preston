@@ -8,5 +8,6 @@
     "after": false,
     "afterEach": false
   },
+  "predef": [ "-Comment" ],
   "extends": "../.jshintrc"
 }
